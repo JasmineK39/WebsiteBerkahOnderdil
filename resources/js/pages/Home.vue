@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-dark">
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-primary-dark via-primary to-primary-light overflow-hidden">
+    <section class="relative bg-linear-to-br from-primary-dark via-primary to-primary-light overflow-hidden">
       <!-- Background Pattern -->
       <div class="absolute inset-0 opacity-10">
         <div
@@ -124,7 +124,7 @@
             class="bg-dark-secondary border border-gray-700 rounded-xl p-8 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20"
           >
             <div
-              class="bg-gradient-to-br from-primary-dark to-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+              class="bg-linear-to-br from-primary-dark to-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
             >
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -145,7 +145,7 @@
             class="bg-dark-secondary border border-gray-700 rounded-xl p-8 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20"
           >
             <div
-              class="bg-gradient-to-br from-primary-dark to-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+              class="bg-linear-to-br from-primary-dark to-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
             >
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -166,7 +166,7 @@
             class="bg-dark-secondary border border-gray-700 rounded-xl p-8 hover:border-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/20"
           >
             <div
-              class="bg-gradient-to-br from-primary-dark to-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+              class="bg-linear-to-br from-primary-dark to-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
             >
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -187,7 +187,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-gradient-to-r from-primary-dark via-primary to-primary-light py-16">
+    <section class="bg-linear-to-r from-primary-dark via-primary to-primary-light py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-black text-white mb-4">
           Butuh Bantuan Menemukan Sparepart?
@@ -219,7 +219,8 @@
 
 <script setup>
 import CatalogCard from '../components/CatalogCard.vue'
-import { useCatalog } from '../composables/useCatalog.js'
+import useCatalog from '/resources/js/composables/useCatalog.js';
+
 
 // Ambil data & logic dari composable
 const { paginatedCars, currentPage, totalPages, nextPage, prevPage, goToPage } = useCatalog()
