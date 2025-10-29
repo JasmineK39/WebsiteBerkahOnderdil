@@ -97,62 +97,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import SparepartCard from '../components/SparepartCard.vue'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 
-const product = ref({
-  id: 1,
-  name: 'Mesin Bensin 1.5L Toyota Avanza',
-  grade: 'A',
-  price: 8500000,
-  image: '/placeholder.svg?height=400&width=500',
-  description: 'Mesin bensin original Toyota Avanza 1.5L dengan kondisi prima. Telah melalui quality control ketat dan siap untuk digunakan. Kompatibel dengan berbagai tahun produksi Toyota Avanza.',
-  type: 'Mesin Bensin',
-  compatibility: 'Toyota Avanza 2007-2023',
-  weight: '120 kg',
-  warranty: '6 bulan',
-  stock: 5
-})
+const route = useRoute()
+const product = ref(null)
+const loading = ref(true)
+const error = ref(null)
 
-const relatedProducts = ref([
-  {
-    id: 2,
-    name: 'Transmisi Otomatis Avanza',
-    grade: 'A',
-    price: 12000000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Transmisi otomatis original dengan garansi resmi'
-  },
-  {
-    id: 3,
-    name: 'Radiator Pendingin',
-    grade: 'B',
-    price: 1500000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Radiator pendingin berkualitas tinggi'
-  },
-  {
-    id: 4,
-    name: 'Alternator 12V',
-    grade: 'A',
-    price: 2000000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Alternator original dengan output stabil'
-  },
-  {
-    id: 5,
-    name: 'Baterai Mobil 60Ah',
-    grade: 'A',
-    price: 1200000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Baterai mobil kapasitas 60Ah tahan lama'
+onMounted(async () => {
+  try {
+    const res = await axios.get(`/api/spareparts/${route.params.id}`)
+    product.value = res.data
+  } catch (err) {
+    console.error(err)
+    error.value = 'Data produk tidak ditemukan.'
+  } finally {
+    loading.value = false
   }
-])
-
-const formatPrice = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-}
+})
 </script>
+
 
 <style scoped>
 </style>

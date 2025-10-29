@@ -75,59 +75,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SparepartCard from '../components/SparepartCard.vue'
+import axios from 'axios'
 
-const products = ref([
-  {
-    id: 1,
-    name: 'Mesin Bensin 1.5L',
-    grade: 'A',
-    price: 8500000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Mesin bensin original dengan kondisi prima'
-  },
-  {
-    id: 2,
-    name: 'Transmisi Otomatis',
-    grade: 'A',
-    price: 12000000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Transmisi otomatis original dengan garansi'
-  },
-  {
-    id: 3,
-    name: 'Radiator Pendingin',
-    grade: 'B',
-    price: 1500000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Radiator pendingin berkualitas tinggi'
-  },
-  {
-    id: 4,
-    name: 'Alternator 12V',
-    grade: 'A',
-    price: 2000000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Alternator original dengan output stabil'
-  },
-  {
-    id: 5,
-    name: 'Baterai Mobil 60Ah',
-    grade: 'A',
-    price: 1200000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Baterai mobil kapasitas 60Ah tahan lama'
-  },
-  {
-    id: 6,
-    name: 'Kampas Rem Depan',
-    grade: 'B',
-    price: 450000,
-    image: '/placeholder.svg?height=200&width=300',
-    description: 'Kampas rem depan berkualitas OEM'
+const products = ref([])
+const loading = ref(true)
+const error = ref(null)
+
+onMounted(async () => {
+  try {
+    const res = await axios.get('/api/spareparts')
+    products.value = res.data
+  } catch (err) {
+    console.error(err)
+    error.value = 'Gagal memuat data sparepart.'
+  } finally {
+    loading.value = false
   }
-])
+})
 </script>
 
 <style scoped>

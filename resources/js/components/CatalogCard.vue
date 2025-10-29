@@ -13,7 +13,7 @@
           {{ product.year }}
         </div>
         <!-- Overlay on Hover -->
-        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+        <div class="absolute inset-0 bg-linear-to-t from-dark via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
           <span class="text-light font-semibold text-sm bg-primary px-4 py-2 rounded-full">
             Lihat Detail →
           </span>
@@ -101,7 +101,7 @@ const formatPrice = (price) => {
 
 .line-clamp-2 {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
