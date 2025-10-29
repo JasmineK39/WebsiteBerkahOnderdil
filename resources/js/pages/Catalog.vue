@@ -75,17 +75,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
 import SparepartCard from '../components/SparepartCard.vue'
 import axios from 'axios'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const products = ref([])
-const loading = ref(true)
+const loading = ref(false)
 const error = ref(null)
+const route = useRoute()
 
-onMounted(async () => {
+async function fetchProducts() {
+  loading.value = true
+  error.value = null
   try {
-    const res = await axios.get('/api/spareparts')
+    const search = route.query.search || ''
+    const res = await axios.get(`/api/spareparts?search=${search}`)
     products.value = res.data
   } catch (err) {
     console.error(err)
@@ -93,8 +98,15 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+// Saat pertama kali dibuka
+onMounted(fetchProducts)
+
+// Saat parameter pencarian di URL berubah
+watch(() => route.query.search, fetchProducts)
 </script>
+
 
 <style scoped>
 </style>

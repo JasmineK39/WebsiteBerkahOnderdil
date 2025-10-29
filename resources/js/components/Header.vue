@@ -44,20 +44,26 @@
         </nav>
 
         <!-- Search & Auth Section -->
-        <div class="flex items-center space-x-3">
-          <!-- Search Bar - Desktop -->
-          <div class="hidden md:block relative">
-            <input
-              type="text"
-              placeholder="Cari sparepart..."
-              class="w-72 px-4 py-2.5 pr-11 rounded-lg bg-white/95 backdrop-blur-sm text-[#0B090A] placeholder-[#B1A7A6] border-2 border-transparent focus:border-white focus:outline-none focus:bg-white transition-all font-medium"
-            />
-            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-[#BA181B] hover:text-[#E5383B] transition">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
+<div class="flex items-center space-x-3">
+  <!-- Search Bar - Desktop -->
+  <div class="hidden md:block relative">
+    <input
+      v-model="keyword"
+      @keyup.enter="goToSearch"
+      type="text"
+      placeholder="Cari sparepart..."
+      class="w-72 px-4 py-2.5 pr-11 rounded-lg bg-white/95 backdrop-blur-sm text-[#0B090A] placeholder-[#B1A7A6] border-2 border-transparent focus:border-white focus:outline-none focus:bg-white transition-all font-medium"
+    />
+    <button
+      @click="goToSearch"
+      class="absolute right-3 top-1/2 -translate-y-1/2 text-[#BA181B] hover:text-[#E5383B] transition"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </button>
+  </div>
+
 
           <!-- Login Button - Desktop -->
           <button
@@ -155,6 +161,16 @@
 <script setup>
 import { ref } from 'vue'
 import LoginModal from './LoginModal.vue'
+import { useRouter } from 'vue-router'
+
+const keyword = ref('')
+const router = useRouter()
+
+function goToSearch() {
+  if (keyword.value.trim() !== '') {
+    router.push({ path: '/catalog', query: { search: keyword.value } })
+  }
+}
 
 const showLoginModal = ref(false)
 const mobileMenuOpen = ref(false)
