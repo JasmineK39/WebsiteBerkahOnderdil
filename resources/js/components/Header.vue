@@ -44,26 +44,43 @@
         </nav>
 
         <!-- Search & Auth Section -->
-<div class="flex items-center space-x-3">
-  <!-- Search Bar - Desktop -->
-  <div class="hidden md:block relative">
-    <input
-      v-model="keyword"
-      @keyup.enter="goToSearch"
-      type="text"
-      placeholder="Cari sparepart..."
-      class="w-72 px-4 py-2.5 pr-11 rounded-lg bg-white/95 backdrop-blur-sm text-[#0B090A] placeholder-[#B1A7A6] border-2 border-transparent focus:border-white focus:outline-none focus:bg-white transition-all font-medium"
-    />
-    <button
-      @click="goToSearch"
-      class="absolute right-3 top-1/2 -translate-y-1/2 text-[#BA181B] hover:text-[#E5383B] transition"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-    </button>
-  </div>
+        <div class="flex items-center space-x-3">
+          <!-- Search Bar - Desktop -->
+          <div class="hidden md:block relative">
+            <input
+              v-model="keyword"
+              @keyup.enter="goToSearch"
+              type="text"
+              placeholder="Cari sparepart..."
+              class="w-72 px-4 py-2.5 pr-11 rounded-lg bg-white/95 backdrop-blur-sm text-[#0B090A] placeholder-[#B1A7A6] border-2 border-transparent focus:border-white focus:outline-none focus:bg-white transition-all font-medium"
+            />
+            <button
+              @click="goToSearch"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-[#BA181B] hover:text-[#E5383B] transition"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
 
+          <!-- 🛒 Cart Icon -->
+          <router-link 
+            to="/cart"
+            class="relative text-white hover:text-[#FFD60A] transition p-2 rounded-lg hover:bg-white/10"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9h14l-2-9M10 21a1 1 0 11-2 0 1 1 0 012 0zm8 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+            </svg>
+            <!-- Badge -->
+            <span
+              v-if="cartCount > 0"
+              class="absolute -top-1 -right-1 bg-[#FFD60A] text-[#161A1D] text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center"
+            >
+              {{ cartCount }}
+            </span>
+          </router-link>
 
           <!-- Login Button - Desktop -->
           <button
@@ -142,6 +159,15 @@
             Tentang
           </router-link>
 
+          <!-- Mobile Cart -->
+          <router-link
+            to="/cart"
+            @click="mobileMenuOpen = false"
+            class="block px-4 py-3 text-white border-2 border-[#FFD60A] rounded-lg hover:bg-[#FFD60A] hover:text-[#161A1D] transition-all font-semibold"
+          >
+            🛒 Keranjang <span v-if="cartCount > 0">({{ cartCount }})</span>
+          </router-link>
+
           <!-- Mobile Login -->
           <button
             @click="showLoginModal = true; mobileMenuOpen = false"
@@ -174,8 +200,7 @@ function goToSearch() {
 
 const showLoginModal = ref(false)
 const mobileMenuOpen = ref(false)
-</script>
 
-<style scoped>
-/* Optional: Add custom styles if needed */
-</style>
+// 🛒 jumlah item di keranjang (sementara dummy)
+const cartCount = ref(2) // nanti bisa diganti reactive sesuai data nyata
+</script>
