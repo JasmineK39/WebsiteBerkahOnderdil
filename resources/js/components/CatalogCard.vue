@@ -1,108 +1,41 @@
 <template>
-  <router-link :to="`/product/${product.id}`" class="group block">
-    <div class="bg-card rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-700">
-      <!-- Image Container -->
-      <div class="relative overflow-hidden bg-dark-secondary h-52">
-        <img
-          :src="product.image"
-          :alt="product.name"
-          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-        <!-- Year Badge -->
-        <div class="absolute top-3 right-3 bg-primary text-light px-3 py-1 rounded-lg font-bold text-sm shadow-lg">
-          {{ product.year }}
-        </div>
-        <!-- Overlay on Hover -->
-        <div class="absolute inset-0 bg-linear-to-t from-dark via-dark/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-          <span class="text-light font-semibold text-sm bg-primary px-4 py-2 rounded-full">
-            Lihat Detail →
-          </span>
-        </div>
-      </div>
+  <div
+    class="bg-dark-secondary rounded-xl overflow-hidden shadow-lg hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300"
+  >
+    <img
+      :src="car.image ? `/storage/${car.image}` : '/images/no-image.jpg'"
+      alt="Gambar Mobil"
+      class="w-full h-36 object-contain bg-white/10"
+    />
+    <div class="p-4">
+  <!-- Nama Mobil -->
+  <h3 class="text-xl font-bold text-red-500 mb-1">
+    {{ car.brand }} {{ car.model }}
+  </h3>
 
-      <!-- Content -->
-      <div class="p-5 bg-dark-secondary">
-        <h3 class="text-lg font-bold text-light mb-3 group-hover:text-primary transition-colors line-clamp-2">
-          {{ product.name }}
-        </h3>
-        
-        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-          <div>
-            <p class="text-xs text-gray uppercase tracking-wide mb-1">Harga</p>
-            <span class="text-primary-light font-bold text-xl">
-              Rp {{ formatPrice(product.price) }}
-            </span>
-          </div>
-          <div class="text-right">
-            <p class="text-xs text-gray uppercase tracking-wide mb-1">Stok</p>
-            <span class="text-light-secondary bg-dark px-3 py-1 rounded-full text-sm font-semibold">
-              {{ product.itemCount }} item
-            </span>
-          </div>
-        </div>
-      </div>
+
+      <!-- Harga (opsional, jika ada) -->
+      <p v-if="car.price" class="text-primary font-semibold text-lg mb-2">
+        Rp {{ Number(car.price).toLocaleString('id-ID') }}
+      </p>
+
+      <!-- Tahun -->
+      <p class="text-white/80 text-sm mb-1">Tahun: {{ car.year }}</p>
+
+      <!-- Deskripsi -->
+      <p class="text-white/70 text-sm leading-relaxed">
+        {{ car.description }}
+      </p>
     </div>
-  </router-link>
+  </div>
 </template>
+
 
 <script setup>
 defineProps({
-  product: {
+  car: {
     type: Object,
     required: true
   }
 })
-
-const formatPrice = (price) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-}
 </script>
-
-<style scoped>
-.bg-dark {
-  background-color: #0B090A;
-}
-
-.bg-dark-secondary {
-  background-color: #161A1D;
-}
-
-.bg-card {
-  background-color: #161A1D;
-}
-
-.bg-primary {
-  background-color: #BA181B;
-}
-
-.text-primary {
-  color: #E5383B;
-}
-
-.text-primary-light {
-  color: #E5383B;
-}
-
-.text-light {
-  color: #F5F3F4;
-}
-
-.text-light-secondary {
-  color: #D3D3D3;
-}
-
-.text-gray {
-  color: #B1A7A6;
-}
-
-.border-gray-700 {
-  border-color: #2a2d31;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

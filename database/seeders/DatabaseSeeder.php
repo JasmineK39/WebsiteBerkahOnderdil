@@ -13,10 +13,14 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-{
-    $this->call(SparepartSeeder::class);
-}
+    public function run()
+    {
+        $this->call([
+            MobilSeeder::class,
+            KategoriSeeder::class,
+            SparepartSeeder::class,
+        ]);
+    }
 
     
 }
