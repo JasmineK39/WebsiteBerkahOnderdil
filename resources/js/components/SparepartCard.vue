@@ -59,9 +59,10 @@ const formatPrice = (price) => {
 }
 
 // Fungsi untuk navigasi ke halaman detail
-const lihatDetail = (id) => {
-  router.push(`/sparepart/${id}`)
+function lihatDetail(id) {
+  router.push(`/product/${id}`)
 }
+
 </script>
 
 <style scoped>
