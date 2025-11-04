@@ -15,3 +15,4 @@ Route::get('/spareparts', [SparepartController::class, 'index']);
 Route::get('/spareparts/{id}', [SparepartController::class, 'show']);
 
 Route::get('/cars', [CarController::class, 'index']);
+
