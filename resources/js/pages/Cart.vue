@@ -17,8 +17,11 @@ const total = computed(() =>
 
 // Fungsi checkout: buka WhatsApp tanpa pesan otomatis
 const checkout = () => {
-  const phoneNumber = '081xxxxxx' // ganti dengan nomor toko kamu (tanpa +)
-  window.open(`https://wa.me/${phoneNumber}`, '_blank')
+  const phoneNumber = '081326553304' // pastikan format internasional tanpa tanda + dan 0 di depan
+  const message = 'Halo, saya ingin checkout.'
+  const encodedMessage = encodeURIComponent(message)
+
+  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
 }
 
 // Fungsi tambah/kurangi qty

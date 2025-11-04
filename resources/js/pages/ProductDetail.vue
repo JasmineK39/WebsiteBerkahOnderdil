@@ -60,11 +60,12 @@
           <div class="flex flex-col sm:flex-row gap-4">
             <button
               class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+              @click="addToCart(product)"
             >
               Tambah ke Keranjang
             </button>
             <a
-              :href="`https://wa.me/6281326553304?text=Halo, saya tertarik dengan ${product.name}`"
+              :href="`https://wa.me/621326553304?text=Halo, saya tertarik dengan ${product.name}`"
               target="_blank"
               class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition text-center"
             >
@@ -78,14 +79,22 @@
 </template>
 
 <script setup>
+import { useCartStore } from '../store/cart'
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+const cart = useCartStore()
+const router = useRouter()
 const route = useRoute()
 const product = ref(null)
 const loading = ref(true)
 const error = ref(null)
+
+function addToCart(sparepart) {
+  cart.addToCart(sparepart)      // Tambahkan ke keranjang (Pinia)
+  router.push('/cart')            // Arahkan ke halaman keranjang
+}
 
 async function fetchProductDetail() {
   try {
