@@ -64,7 +64,7 @@
               Tambah ke Keranjang
             </button>
             <a
-              :href="`https://wa.me/6281234567890?text=Halo, saya tertarik dengan ${product.name}`"
+              :href="`https://wa.me/6281326553304?text=Halo, saya tertarik dengan ${product.name}`"
               target="_blank"
               class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition text-center"
             >
