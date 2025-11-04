@@ -9,6 +9,10 @@ import SparepartIndex from '@/pages/Admin/Sparepart/Index.vue';
 import SparepartCreate from '@/pages/Admin/Sparepart/Create.vue';
 import SparepartEdit from '@/pages/Admin/Sparepart/Edit.vue';
 
+import RequestIndex from '@/pages/Admin/RequestList/Index.vue'
+import RequestEdit from '@/pages/Admin/RequestList/Edit.vue'
+
+
 export const adminRoutes = [
   {
     path: '/admin',
@@ -57,6 +61,18 @@ export const adminRoutes = [
         path: ':pathMatch(.*)*', 
         name: 'AdminNotFound', 
         component: () => import('@/Pages/Admin/AdminNotFound.vue') 
+      },
+
+     // == Requests ==
+     {
+        path: 'requests',
+        name: 'AdminRequestIndex',
+        component: RequestIndex,
+      },
+      {
+        path: 'requests/:id/edit',
+        name: 'AdminRequestEdit',
+        component: RequestEdit,
       },
     ],
   },

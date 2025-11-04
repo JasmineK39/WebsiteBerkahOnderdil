@@ -20,6 +20,14 @@
       >
         Model Mobil
       </RouterLink>
+
+      <RouterLink
+        to="/admin/requests"
+        class="block px-4 py-2 hover:bg-blue-100 rounded"
+        active-class="bg-blue-200 font-semibold"
+      >
+        Request
+      </RouterLink>
     </nav>
 
     <footer class="p-4 border-t text-xs text-gray-500 text-center">

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gradient-to-b from-red-900 via-red-800 to-red-900 min-h-screen flex flex-col text-white">
+  <div class="bg-gradient-to-b from-white-900 via-white-800 to-white-900 min-h-screen flex flex-col text-black">
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow py-10">
@@ -13,7 +13,7 @@
         </div>
 
         <!-- Form Request -->
-        <form @submit.prevent="submitForm" class="bg-red-950/60 p-6 rounded-xl shadow-lg mb-10">
+        <form @submit.prevent="submitForm" class="bg-red-950 text-white p-6 rounded-xl shadow-lg mb-10">
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block mb-2 font-medium">Merek Mobil</label>
@@ -55,7 +55,7 @@
         <h3 class="text-2xl font-semibold mb-4">Riwayat Request Saya</h3>
         <div class="overflow-x-auto bg-red-950/50 rounded-xl shadow-lg">
           <table class="min-w-full text-left text-sm">
-            <thead class="bg-red-800">
+            <thead class="bg-red-800 text-white">
               <tr>
                 <th class="px-4 py-3">No</th>
                 <th class="px-4 py-3">Merek</th>
