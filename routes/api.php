@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SparepartController;
 use App\Http\Controllers\Admin\SparepartController as AdminSparepartController;
 use App\Http\Controllers\Admin\ModelMobilController as AdminModelMobilController;
+use App\Http\Controllers\Api\CarController;
 
 // Tes route awal
 Route::get('/test', function () {
@@ -14,6 +15,9 @@ Route::get('/test', function () {
 // Route utama sparepart
 Route::get('/spareparts', [SparepartController::class, 'index']);
 Route::get('/spareparts/{id}', [SparepartController::class, 'show']);
+
+
+Route::get('/cars', [CarController::class, 'index']);
 
 Route::prefix('admin')->group(function () {
     // CRUD Sparepart

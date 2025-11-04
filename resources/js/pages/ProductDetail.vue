@@ -1,97 +1,78 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Breadcrumb -->
-      <div class="mb-8 text-sm text-gray-600">
-        <router-link to="/" class="text-blue-600 hover:underline">Home</router-link>
-        <span class="mx-2">/</span>
-        <router-link to="/catalog" class="text-blue-600 hover:underline">Katalog</router-link>
-        <span class="mx-2">/</span>
-        <span>{{ product.name }}</span>
-      </div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div v-if="loading" class="text-center text-gray-600 text-lg">Memuat data...</div>
+      <div v-else-if="error" class="text-center text-red-600">{{ error }}</div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-lg shadow-md">
-        <!-- Image -->
+      <div
+        v-else-if="product"
+        class="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-8"
+      >
+        <!-- Gambar Produk -->
         <div>
           <img
-            :src="product.image"
+            :src="product.image || '/placeholder.png'"
             :alt="product.name"
-            class="w-full rounded-lg"
+            class="w-full h-96 object-cover rounded-lg"
           />
         </div>
 
-        <!-- Details -->
+        <!-- Detail Produk -->
         <div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-4">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">
             {{ product.name }}
           </h1>
+          <p class="text-gray-500 text-sm mb-4">
+            Brand: {{ product.brand }} | Type: {{ product.type }}
+          </p>
 
-          <!-- Grade -->
-          <div class="mb-4">
-            <span class="inline-block bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-semibold">
-              Grade: {{ product.grade }}
+          <div class="flex items-center gap-3 mb-4">
+            <span
+              class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-semibold"
+            >
+              Grade {{ product.grade }}
+            </span>
+            <span
+              class="px-3 py-1 rounded-full text-sm font-semibold"
+              :class="
+                product.stock > 0
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-red-100 text-red-700'
+              "
+            >
+              {{ product.stock > 0 ? `Stok ${product.stock}` : 'Stok Habis' }}
             </span>
           </div>
 
-          <!-- Price -->
-          <div class="mb-6">
-            <p class="text-4xl font-bold text-blue-600">
-              Rp {{ formatPrice(product.price) }}
-            </p>
-          </div>
+          <p class="text-3xl font-bold text-blue-600 mb-6">
+            Rp {{ formatPrice(product.price) }}
+          </p>
 
-          <!-- Description -->
-          <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Deskripsi</h3>
-            <p class="text-gray-600 leading-relaxed">
+          <!-- Deskripsi Produk -->
+          <div class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">Deskripsi</h2>
+            <p class="text-gray-700 leading-relaxed whitespace-pre-line">
               {{ product.description }}
             </p>
           </div>
 
-          <!-- Specifications -->
-          <div class="mb-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Spesifikasi</h3>
-            <ul class="space-y-2 text-gray-600">
-              <li><strong>Tipe:</strong> {{ product.type }}</li>
-              <li><strong>Kompatibilitas:</strong> {{ product.compatibility }}</li>
-              <li><strong>Berat:</strong> {{ product.weight }}</li>
-              <li><strong>Garansi:</strong> {{ product.warranty }}</li>
-            </ul>
-          </div>
-
-          <!-- Stock -->
-          <div class="mb-6">
-            <p class="text-sm text-gray-600">
-              <span class="font-semibold">Stok Tersedia:</span> {{ product.stock }} unit
-            </p>
-          </div>
-
-          <!-- Actions -->
-          <div class="space-y-3">
-            <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-bold text-lg">
+          <!-- Tombol Aksi -->
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+            >
               Tambah ke Keranjang
             </button>
-            <button class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition font-bold text-lg flex items-center justify-center gap-2">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c0-.297-.113-.585-.32-.799l-4.88-5.005c-.165-.17-.39-.267-.624-.267-.234 0-.459.097-.624.267l-4.88 5.005c-.207.214-.32.502-.32.799 0 .614.502 1.116 1.116 1.116h.528v4.771c0 .614.502 1.116 1.116 1.116h6.968c.614 0 1.116-.502 1.116-1.116v-4.771h.528c.614 0 1.116-.502 1.116-1.116z" />
-              </svg>
+            <a
+              :href="`https://wa.me/6281326553304?text=Halo, saya tertarik dengan ${product.name}`"
+              target="_blank"
+              class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition text-center"
+            >
               Chat via WhatsApp
-            </button>
+            </a>
           </div>
         </div>
       </div>
-
-      <!-- Related Products -->
-      <section class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Produk Terkait</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <SparepartCard
-            v-for="item in relatedProducts"
-            :key="item.id"
-            :sparepart="item"
-          />
-        </div>
-      </section>
     </div>
   </div>
 </template>
@@ -106,19 +87,24 @@ const product = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
-onMounted(async () => {
+async function fetchProductDetail() {
   try {
     const res = await axios.get(`/api/spareparts/${route.params.id}`)
     product.value = res.data
   } catch (err) {
     console.error(err)
-    error.value = 'Data produk tidak ditemukan.'
+    error.value = 'Gagal memuat detail produk.'
   } finally {
     loading.value = false
   }
-})
-</script>
+}
 
+const formatPrice = (price) => {
+  return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
+onMounted(fetchProductDetail)
+</script>
 
 <style scoped>
 </style>

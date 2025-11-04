@@ -19,6 +19,6 @@ class ModelMobil extends Model
 
     public function spareparts()
     {
-        return $this->hasMany(Sparepart::class);
+        return $this->hasMany(Sparepart::class, 'model_mobil_id');
     }
 }

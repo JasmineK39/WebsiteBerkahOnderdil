@@ -65,13 +65,14 @@
         </div>
 
         <!-- Grid produk -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <CatalogCard
-            v-for="car in paginatedCars"
-            :key="car.id"
-            :product="car"
-          />
-        </div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+  <CatalogCard
+    v-for="car in cars"
+    :key="car.id"
+    :car="car"
+  />
+</div>
+
 
         <!-- Pagination -->
         <div class="flex justify-center items-center space-x-3 mt-6">
@@ -219,12 +220,12 @@
 
 <script setup>
 import CatalogCard from '../components/CatalogCard.vue'
-import useCatalog from '/resources/js/composables/useCatalog.js';
-
+import useCatalog from '/resources/js/composables/useCatalog.js'
 
 // Ambil data & logic dari composable
-const { paginatedCars, currentPage, totalPages, nextPage, prevPage, goToPage } = useCatalog()
+const { cars, currentPage, totalPages, nextPage, prevPage, goToPage } = useCatalog()
 </script>
+
 
 <style scoped>
 /* semua style-mu tetap sama persis */
