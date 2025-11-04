@@ -4,6 +4,7 @@ import Catalog from '../pages/Catalog.vue';
 import Checkout from '../pages/Checkout.vue';
 import ProductDetail from '../pages/ProductDetail.vue';
 import Request from '../pages/Request.vue';
+import AdminDashboard from '../pages/Admin/Dashboard.vue';
 
 const routes = [
   { path: '/', component: Home },
@@ -11,6 +12,7 @@ const routes = [
   { path: '/checkout', component: Checkout },
   { path: '/product/:id', component: ProductDetail },
   { path: '/request', name: 'request', component: Request },
+  { path: '/admin', component: AdminDashboard }, // ✅ route baru admin
 ];
 
 export default createRouter({

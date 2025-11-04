@@ -86,7 +86,7 @@ const error = ref(null)
 
 // ✅ Tambahkan reaktif state untuk filter (biar bisa digunakan di template)
 const minPrice = ref(0)
-const maxPrice = ref(20000000)
+const maxPrice = ref(1500000)
 const selectedGrades = ref([])
 const selectedCategories = ref([])
 
@@ -104,7 +104,7 @@ async function fetchProducts() {
     if (selectedGrades.value.length > 0)
       params.append('grade', selectedGrades.value.join(','))
     if (minPrice.value > 0) params.append('min_price', minPrice.value)
-    if (maxPrice.value < 20000000) params.append('max_price', maxPrice.value)
+    if (maxPrice.value < 1500000) params.append('max_price', maxPrice.value)
 
     const url = `/api/spareparts?${params.toString()}`
     console.log('🔍 Fetching:', url)

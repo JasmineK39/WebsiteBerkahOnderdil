@@ -11,6 +11,10 @@ class SparepartController extends Controller
     {
         $query = Sparepart::query()->with('kategoris');
 
+        if ($request->filled('car_id')) {
+        $query->where('model_mobil_id', $request->car_id);
+    }
+    
         if ($request->filled('search')) {
             $keyword = $request->search;
             $query->where(function ($q) use ($keyword) {
@@ -49,4 +53,32 @@ class SparepartController extends Controller
         $sparepart = Sparepart::with('modelMobil', 'kategoris')->findOrFail($id);
         return response()->json($sparepart);
     }
+
+    public function store(Request $request)
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'brand' => 'nullable|string',
+        'price' => 'required|numeric',
+        'grade' => 'nullable|string',
+        'description' => 'nullable|string',
+    ]);
+    $sparepart = Sparepart::create($data);
+    return response()->json($sparepart);
+}
+
+public function update(Request $request, $id)
+{
+    $sparepart = Sparepart::findOrFail($id);
+    $sparepart->update($request->all());
+    return response()->json($sparepart);
+}
+
+public function destroy($id)
+{
+    $sparepart = Sparepart::findOrFail($id);
+    $sparepart->delete();
+    return response()->json(['message' => 'Deleted successfully']);
+}
+
 }
