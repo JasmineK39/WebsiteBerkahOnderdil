@@ -64,13 +64,12 @@
             >
               Tambah ke Keranjang
             </button>
-            <a
-              :href="`https://wa.me/621326553304?text=Halo, saya tertarik dengan ${product.name}`"
-              target="_blank"
-              class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition text-center"
-            >
-              Chat via WhatsApp
-            </a>
+              <button
+                    @click="chatViaWhatsApp"
+                    class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition text-center"
+                  >
+                    Chat via WhatsApp
+            </button>
           </div>
         </div>
       </div>
@@ -95,6 +94,37 @@ function addToCart(sparepart) {
   cart.addToCart(sparepart)      // Tambahkan ke keranjang (Pinia)
   router.push('/cart')            // Arahkan ke halaman keranjang
 }
+
+function chatViaWhatsApp() {
+  // Nomor WA penjual (pakai format internasional tanpa tanda +)
+  const phoneNumber = '6281326553304'
+
+  // Pastikan data produk sudah ada
+  if (!product.value) return
+
+  // Pesan otomatis yang muncul di WhatsApp
+  const message = `
+Halo, saya tertarik dengan produk berikut:
+
+🛠 *${product.value.name}*
+Brand: ${product.value.brand}
+Type: ${product.value.type}
+Grade: ${product.value.grade}
+Harga: Rp ${formatPrice(product.value.price)}
+Stok: ${product.value.stock > 0 ? product.value.stock : 'Habis'}
+${product.value.image ? `Gambar: ${window.location.origin}/storage/${product.value.image}` : ''}
+
+Mohon info ketersediaannya ya, terima kasih!
+  `.trim()
+
+  // Encode pesan agar bisa dibaca di URL
+  const encodedMessage = encodeURIComponent(message)
+  const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+
+  // Buka WhatsApp di tab baru
+  window.open(waUrl, '_blank')
+}
+
 
 async function fetchProductDetail() {
   try {

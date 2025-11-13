@@ -80,10 +80,10 @@
       <div class="mb-4">
         <label class="block mb-1 font-medium">Status Request</label>
         <select v-model="form.status" class="w-full border rounded p-2">
-          <option value="Menunggu">Menunggu</option>
-          <option value="Diproses">Diproses</option>
-          <option value="Selesai">Selesai</option>
-          <option value="Ditolak">Ditolak</option>
+          <option value="pending">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="fulfilled">Fulfilled</option>
+          <option value="rejected">Rejected</option>
         </select>
       </div>
 
@@ -114,7 +114,7 @@ const form = reactive({
   tahun: '',
   nama_sparepart: '',
   catatan: '',
-  status: 'Menunggu',
+  status: 'pending',
 })
 
 const loadData = async () => {

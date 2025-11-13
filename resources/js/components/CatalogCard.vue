@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="`/spareparts/${car.id}`"
+    :to="`/catalog/${car.id}`"
     class="block bg-dark-secondary rounded-xl overflow-hidden shadow-lg hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300"
   >
     <img

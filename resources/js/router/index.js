@@ -11,6 +11,7 @@ import Cart from '../pages/Cart.vue';
 const routes = [
   { path: '/', component: Home },
   { path: '/catalog', component: Catalog },
+  { path: '/catalog/:carId', name: 'catalog-car', component: Catalog },
   { path: '/checkout', component: Checkout },
   { path: '/product/:id', component: ProductDetail },
   { path: '/request', name: 'request', component: Request },
@@ -22,7 +23,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition; 
+    } else {
+      return { top: 0, left: 0, behavior: 'smooth' }; // setiap pindah halaman, mulai dari atas
+    }
+  },
 });
+
 
 router.beforeEach((to, from, next) => {
   const user = JSON.parse(localStorage.getItem('user')); // misal ambil dari localStorage

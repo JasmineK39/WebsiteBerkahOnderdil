@@ -13,39 +13,39 @@
         </div>
 
         <!-- Form Request -->
-        <form @submit.prevent="submitForm" class="bg-red-950 text-white p-6 rounded-xl shadow-lg mb-10">
+        <form @submit.prevent="submitForm" class="bg-red-800 text-white p-6 rounded-xl shadow-lg mb-10">
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label class="block mb-2 font-medium">Merek Mobil</label>
-              <input v-model="form.brand_req" type="text" placeholder="Contoh: Toyota"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-red-800/50 focus:ring-2 focus:ring-red-500 outline-none" required>
+              <input v-model="form.brand_req" type="text" placeholder="Contoh: Toyota" 
+                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
             </div>
             <div>
               <label class="block mb-2 font-medium">Model Mobil</label>
               <input v-model="form.model_req" type="text" placeholder="Contoh: Avanza"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-red-800/50 focus:ring-2 focus:ring-red-500 outline-none" required>
+                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
             </div>
             <div>
               <label class="block mb-2 font-medium">Tahun</label>
               <input v-model="form.year_req" type="number" placeholder="Contoh: 2018"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-red-800/50 focus:ring-2 focus:ring-red-500 outline-none" required>
+                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
             </div>
             <div>
               <label class="block mb-2 font-medium">Nama Sparepart</label>
               <input v-model="form.sparepart_req" type="text" placeholder="Contoh: Kampas Rem"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-red-800/50 focus:ring-2 focus:ring-red-500 outline-none" required>
+                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
             </div>
           </div>
 
           <div class="mt-4">
             <label class="block mb-2 font-medium">Catatan (opsional)</label>
             <textarea v-model="form.note" rows="3" placeholder="Tuliskan detail tambahan..."
-              class="w-full px-3 py-2 rounded border border-red-700 bg-red-800/50 focus:ring-2 focus:ring-red-500 outline-none"></textarea>
+              class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none"></textarea>
           </div>
 
           <div class="text-right mt-6">
             <button type="submit"
-              class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-all duration-200">
+              class="bg-red-600 hover:bg-red-400 text-white px-6 py-2 rounded-lg transition-all duration-200">
               Kirim Request
             </button>
           </div>
@@ -76,10 +76,10 @@
                 <td class="px-4 py-3">{{ req.sparepart_req }}</td>
                 <td class="px-4 py-3">{{ req.note || '-' }}</td>
                 <td class="px-4 py-3">
-                  <span v-if="req.status === 'Menunggu Konfirmasi'" class="bg-yellow-400 text-black px-2 py-1 rounded">
+                  <span v-if="req.status === 'pending'" class="bg-yellow-400 text-black px-2 py-1 rounded">
                     {{ req.status }}
                   </span>
-                  <span v-else-if="req.status === 'Diterima'" class="bg-green-600 px-2 py-1 rounded">
+                  <span v-else-if="req.status === 'fulfilled'" class="bg-green-600 px-2 py-1 rounded">
                     {{ req.status }}
                   </span>
                   <span v-else class="bg-gray-500 px-2 py-1 rounded">
@@ -119,13 +119,13 @@ const successMessage = ref('')
 const submitForm = async () => {
   try {
     // Kirim request ke API
-    const res = await axios.post('/api/requests', form.value)
+    const res = await axios.post('/api/request-sparepart', form.value)
 
     // Tambahkan request baru ke riwayat langsung
     // Jika API tidak mengembalikan status, kita set default "Menunggu Konfirmasi"
     const newRequest = {
       ...form.value,
-      status: res.data.status || 'Menunggu Konfirmasi'
+      status: res.data.status || 'pending'
     }
 
     requests.value.push(newRequest)

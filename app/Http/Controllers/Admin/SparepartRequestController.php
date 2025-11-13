@@ -21,10 +21,10 @@ class SparepartRequestController extends Controller
                 return [
                     'id' => $r->id,
                     'user_name' => $r->user->name ?? '-',
-                    'brand' => $r->brand,
-                    'model' => $r->model,
-                    'year' => $r->year,
-                    'part_name' => $r->part_name,
+                    'brand' => $r->brand_req,
+                    'model' => $r->model_req,
+                    'year' => $r->year_req,
+                    'part_name' => $r->sparepart_req,
                     'note' => $r->note,
                     'status' => $r->status,
                 ];
@@ -43,10 +43,10 @@ class SparepartRequestController extends Controller
         return response()->json([
             'id' => $r->id,
             'user_name' => $r->user->name ?? '-',
-            'brand' => $r->brand,
-            'model' => $r->model,
-            'year' => $r->year,
-            'part_name' => $r->part_name,
+            'brand' => $r->brand_req,
+            'model' => $r->model_req,
+            'year' => $r->year_req,
+            'part_name' => $r->sparepart_req,
             'note' => $r->note,
             'status' => $r->status,
         ]);
@@ -58,7 +58,7 @@ class SparepartRequestController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'status' => 'required|in:Menunggu,Diproses,Selesai,Ditolak',
+            'status' => 'required|in:pending,in_progress,fulfilled,rejected',
         ]);
 
         if ($validator->fails()) {

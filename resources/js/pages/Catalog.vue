@@ -90,6 +90,8 @@ const maxPrice = ref(1500000)
 const selectedGrades = ref([])
 const selectedCategories = ref([])
 
+const carId = ref(route.params.carId || null)
+
 // 🔹 Fetch data dari backend
 async function fetchProducts() {
   loading.value = true
@@ -99,6 +101,7 @@ async function fetchProducts() {
     const params = new URLSearchParams()
 
     if (route.query.search) params.append('search', route.query.search)
+    if (carId.value) params.append('car_id', carId.value)
     if (selectedCategories.value.length > 0)
       params.append('category', selectedCategories.value.join(','))
     if (selectedGrades.value.length > 0)
@@ -125,6 +128,11 @@ async function fetchProducts() {
 onMounted(fetchProducts)
 watch(() => route.query.search, fetchProducts)
 watch([selectedGrades, selectedCategories, minPrice, maxPrice], fetchProducts)
+watch(() => route.params.carId, (newId) => {
+  carId.value = newId
+  fetchProducts()
+})
+
 </script>
 
 
