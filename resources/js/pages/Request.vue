@@ -44,7 +44,7 @@
               >
                 <option disabled value="">Pilih Model Mobil</option>
                 <option v-for="m in models" :key="m.id" :value="m.model">
-                  {{ m.model }} ({{ m.year }})
+                  {{ m.model }} 
                 </option>
               </select>
             </div>
