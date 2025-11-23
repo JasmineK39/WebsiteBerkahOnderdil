@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SparepartController as AdminSparepartController;
 use App\Http\Controllers\Admin\ModelMobilController as AdminModelMobilController;
 use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\SparepartRequestController;
+use App\Http\Controllers\Api\ModelMobilController;
 
 // Tes route awal
 Route::get('/test', function () {
@@ -38,3 +39,5 @@ Route::prefix('admin')->group(function () {
 Route::get('/request-sparepart', [SparepartRequestController::class, 'apiIndex']);
 Route::post('/request-sparepart', [SparepartRequestController::class, 'apiStore']);
 
+Route::get('/brands', [ModelMobilController::class, 'getBrands']);
+Route::get('/models/{brand}', [ModelMobilController::class, 'getModelsByBrand']);

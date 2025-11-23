@@ -4,6 +4,7 @@
     <!-- MAIN CONTENT -->
     <main class="flex-grow py-10">
       <div class="max-w-6xl mx-auto px-4">
+
         <!-- Judul -->
         <h2 class="text-3xl font-bold text-center mb-8">Request Sparepart</h2>
 
@@ -15,21 +16,47 @@
         <!-- Form Request -->
         <form @submit.prevent="submitForm" class="bg-red-800 text-white p-6 rounded-xl shadow-lg mb-10">
           <div class="grid md:grid-cols-2 gap-4">
+
+            <!-- Dropdown Merek -->
             <div>
               <label class="block mb-2 font-medium">Merek Mobil</label>
-              <input v-model="form.brand_req" type="text" placeholder="Contoh: Toyota" 
-                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
+              <select 
+                v-model="form.brand_req" 
+                @change="loadModels"
+                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"
+                required
+              >
+                <option disabled value="">Pilih Merek Mobil</option>
+                <option v-for="b in brands" :key="b.brand" :value="b.brand">
+                  {{ b.brand }}
+                </option>
+              </select>
             </div>
+
+            <!-- Dropdown Model -->
             <div>
               <label class="block mb-2 font-medium">Model Mobil</label>
-              <input v-model="form.model_req" type="text" placeholder="Contoh: Avanza"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
+              <select 
+                v-model="form.model_req" 
+                :disabled="models.length === 0"
+                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"
+                required
+              >
+                <option disabled value="">Pilih Model Mobil</option>
+                <option v-for="m in models" :key="m.id" :value="m.model">
+                  {{ m.model }} ({{ m.year }})
+                </option>
+              </select>
             </div>
+
+            <!-- Tahun -->
             <div>
               <label class="block mb-2 font-medium">Tahun</label>
               <input v-model="form.year_req" type="number" placeholder="Contoh: 2018"
                 class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none" required>
             </div>
+
+            <!-- Nama Sparepart -->
             <div>
               <label class="block mb-2 font-medium">Nama Sparepart</label>
               <input v-model="form.sparepart_req" type="text" placeholder="Contoh: Kampas Rem"
@@ -37,12 +64,14 @@
             </div>
           </div>
 
+          <!-- Catatan -->
           <div class="mt-4">
             <label class="block mb-2 font-medium">Catatan (opsional)</label>
             <textarea v-model="form.note" rows="3" placeholder="Tuliskan detail tambahan..."
-              class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none"></textarea>
+              class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"></textarea>
           </div>
 
+          <!-- Submit -->
           <div class="text-right mt-6">
             <button type="submit"
               class="bg-red-600 hover:bg-red-400 text-white px-6 py-2 rounded-lg transition-all duration-200">
@@ -51,7 +80,7 @@
           </div>
         </form>
 
-        <!-- Tabel Riwayat Request -->
+        <!-- Riwayat -->
         <h3 class="text-2xl font-semibold mb-4">Riwayat Request Saya</h3>
         <div class="overflow-x-auto bg-red-950/50 rounded-xl shadow-lg">
           <table class="min-w-full text-left text-sm">
@@ -67,8 +96,8 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Baris riwayat akan muncul hanya jika ada data -->
-              <tr v-for="(req, index) in requests" :key="index" class="border-t border-red-700 hover:bg-red-800/40">
+              <tr v-for="(req, index) in requests" :key="index" 
+                  class="border-t border-red-700 hover:bg-red-800/40">
                 <td class="px-4 py-3">{{ index + 1 }}</td>
                 <td class="px-4 py-3">{{ req.brand_req }}</td>
                 <td class="px-4 py-3">{{ req.model_req }}</td>
@@ -90,6 +119,7 @@
             </tbody>
           </table>
         </div>
+
       </div>
     </main>
 
@@ -97,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
 // Form input
@@ -109,20 +139,34 @@ const form = ref({
   note: ''
 })
 
-// Riwayat request, kosong di awal
+// Dropdown data dari API
+const brands = ref([])
+const models = ref([])
+
+// Riwayat
 const requests = ref([])
 
 // Notifikasi sukses
 const successMessage = ref('')
 
-// Submit form
+/* ---------- LOAD DATA BRAND ---------- */
+const getBrands = async () => {
+  const res = await axios.get('/api/brands')
+  brands.value = res.data
+}
+
+/* ---------- LOAD MODEL BERDASARKAN BRAND ---------- */
+const loadModels = async () => {
+  if (!form.value.brand_req) return
+  const res = await axios.get(`/api/models/${form.value.brand_req}`)
+  models.value = res.data
+}
+
+/* ---------- SUBMIT FORM ---------- */
 const submitForm = async () => {
   try {
-    // Kirim request ke API
     const res = await axios.post('/api/request-sparepart', form.value)
 
-    // Tambahkan request baru ke riwayat langsung
-    // Jika API tidak mengembalikan status, kita set default "Menunggu Konfirmasi"
     const newRequest = {
       ...form.value,
       status: res.data.status || 'pending'
@@ -130,14 +174,19 @@ const submitForm = async () => {
 
     requests.value.push(newRequest)
 
-    // Reset form
     form.value = { brand_req: '', model_req: '', year_req: '', sparepart_req: '', note: '' }
+    models.value = []
 
-    // Notifikasi sukses
     successMessage.value = 'Request berhasil dikirim!'
-    setTimeout(() => (successMessage.value = ''), 4000)
+    setTimeout(() => (successMessage.value = ''), 3000)
+
   } catch (error) {
     console.error('Gagal mengirim request:', error)
   }
 }
+
+/* ---------- LOAD BRAND SAAT PERTAMA KALI ---------- */
+onMounted(() => {
+  getBrands()
+})
 </script>
