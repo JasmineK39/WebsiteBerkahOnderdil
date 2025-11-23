@@ -18,11 +18,30 @@ const total = computed(() =>
 // Fungsi checkout: buka WhatsApp tanpa pesan otomatis
 const checkout = () => {
   const phoneNumber = '6281326553304'
-  const message = 'Halo, saya ingin bertanya lebih lanjut terkait barang/proses checkout.'
+
+  // Buat daftar item ke dalam teks pesan WA
+  const itemList = cart.items
+    .map(item => `• ${item.name} (jumlah : ${item.quantity ?? item.qty})  = Rp ${formatPrice(item.price * (item.quantity ?? item.qty))}`)
+    .join('\n')
+
+  // Pesan lengkap yang akan dikirim ke WhatsApp
+  const message = `
+Halo admin, saya ingin melakukan pembelian 🙏
+
+Daftar belanja:
+${itemList}
+
+Total: Rp ${formatPrice(total.value)}
+Metode pembayaran: ${cart.paymentMethod || '-'}
+
+Mohon diproses, terima kasih.
+  `.trim()
+
   const encodedMessage = encodeURIComponent(message)
 
   window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
 }
+
 
 // Fungsi tambah/kurangi qty
 const increaseQty = async (item) => {
