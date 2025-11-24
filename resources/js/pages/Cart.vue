@@ -200,3 +200,83 @@ const decreaseQty = async (item) => {
   opacity: 0;
 }
 </style>
+=======
+<script setup>
+import { computed } from 'vue'
+import { useCartStore } from '../store/cart'
+
+const cart = useCartStore()
+
+// Format harga dengan aman
+const formatPrice = (price) => {
+  if (price === undefined || price === null) return '0'
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
+// Total harga dihitung langsung dari items
+const total = computed(() =>
+  cart.items.reduce((sum, item) => sum + (item.price ?? 0) * (item.qty ?? 1), 0)
+)
+
+// Fungsi checkout: buka WhatsApp tanpa pesan otomatis
+const checkout = () => {
+  const phoneNumber = '6281326553304'
+
+  // Buat daftar item ke dalam teks pesan WA
+  const itemList = cart.items
+    .map(item => `• ${item.name} (jumlah : ${item.quantity ?? item.qty})  = Rp ${formatPrice(item.price * (item.quantity ?? item.qty))}`)
+    .join('\n')
+
+  // Pesan lengkap yang akan dikirim ke WhatsApp
+  const message = `
+Halo admin, saya ingin melakukan pembelian 🙏
+
+Daftar belanja:
+${itemList}
+
+Total: Rp ${formatPrice(total.value)}
+Metode pembayaran: ${cart.paymentMethod || '-'}
+
+Mohon diproses, terima kasih.
+  `.trim()
+
+  const encodedMessage = encodeURIComponent(message)
+
+  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
+}
+
+
+// Fungsi tambah/kurangi qty
+const increaseQty = async (item) => {
+  try {
+    // Coba kirim ke API (kalau user login)
+    await axios.post(`/api/cart`, {
+      sparepart_id: item.id,
+      quantity: 1
+    })
+    await fetchCart() // refresh isi cart dari backend
+  } catch (err) {
+    // Jika gagal (kemungkinan guest mode) → fallback ke local Pinia
+    console.warn('Gagal menambah quantity di backend, gunakan local mode', err)
+    cart.increaseQty(item.id)
+  }
+}
+
+const decreaseQty = async (item) => {
+  try {
+    if (item.quantity > 1) {
+      await axios.post(`/api/cart`, {
+        sparepart_id: item.id,
+        quantity: -1
+      })
+    } else {
+      await axios.delete(`/api/cart/${item.id}`)
+    }
+    await fetchCart()
+  } catch (err) {
+    // Fallback ke local jika gagal koneksi/API
+    console.warn('Gagal mengurangi quantity di backend, gunakan local mode', err)
+    cart.decreaseQty(item.id)
+  }
+}
+</script>

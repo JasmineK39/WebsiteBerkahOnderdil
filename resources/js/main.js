@@ -4,6 +4,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import App from './app.vue';
 import router from './router';
 
+
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../css/style.css';
 import './bootstrap';
@@ -14,6 +15,7 @@ pinia.use(piniaPluginPersistedstate);
 
 // Konfigurasi default axios
 axios.defaults.baseURL = '/';
+
 axios.defaults.headers.common['Accept'] = 'application/json';
 
 // Interceptor: Setiap request keluar, tempelkan Token otomatis

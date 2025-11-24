@@ -4,11 +4,13 @@ import { adminRoutes } from './admin';
 import MainLayout from '../components/layouts/MainLayout.vue';
 import AuthLayout from '../components/layouts/AuthLayout.vue';
 
+
 import Home from '../pages/Home.vue';
 import Catalog from '../pages/Catalog.vue';
 import Checkout from '../pages/Checkout.vue';
 import ProductDetail from '../pages/ProductDetail.vue';
 import Request from '../pages/Request.vue';
+
 import Cart from '../pages/Cart.vue';
 import LoginView from '../pages/Auth/LoginView.vue';
 import RegisterView from '../pages/Auth/RegisterView.vue';
@@ -41,7 +43,7 @@ const router = createRouter({
 
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition; 
+      return savedPosition;
     } else {
       return { top: 0, left: 0, behavior: 'smooth' }; // setiap pindah halaman, mulai dari atas
     }

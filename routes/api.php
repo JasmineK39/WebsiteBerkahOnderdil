@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\ModelMobilController;
 use App\Http\Controllers\AuthController;
 
 // Tes route awal
-
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);
 });
@@ -35,6 +34,7 @@ Route::middleware('auth:sanctum','check_status')->group(function () {
     Route::post('/request-sparepart', [SparepartRequestController::class, 'apiStore']);
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+
     // CRUD Sparepart
     Route::get('/spareparts', [AdminSparepartController::class, 'index']);
     Route::get('/spareparts/{id}', [AdminSparepartController::class, 'show']);
