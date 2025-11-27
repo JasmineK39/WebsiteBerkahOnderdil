@@ -10,7 +10,7 @@
           </div>
           <div class="hidden sm:block">
             <h1 class="text-2xl font-bold text-white leading-tight tracking-wide">BERKAH ONDERDIL</h1>
-            <p class="text-xs text-[#F5F3F4] font-medium">Melayani Jual Beli sparepart Mobil Second</p>
+            <p class="text-xs text-[#F5F3F4] font-medium">Melayani Jual Beli Sparepart Mobil Second</p>
           </div>
         </router-link>
 

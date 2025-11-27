@@ -12,8 +12,6 @@ class ModelMobil extends Model
     protected $fillable = [
         'brand',
         'model',
-        'year',
-        'description',
         'image'
     ];
 

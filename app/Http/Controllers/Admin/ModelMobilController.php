@@ -27,9 +27,6 @@ class ModelMobilController extends Controller
             
             'brand' => 'required|string|max:100',
             'model' => 'required|string|max:150',
-            // Aturan 'year' yang disempurnakan
-            'year' => "nullable|integer|digits:4|min:1886|max:$maxYear",
-            'description' => 'nullable|string',
             'image' => 'nullable|string',
         ]);
 

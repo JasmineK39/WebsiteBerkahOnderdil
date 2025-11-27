@@ -23,7 +23,7 @@ class ModelMobilController extends Controller
     public function getModelsByBrand($brand)
     {
         $models = ModelMobil::where('brand', $brand)
-            ->select('id', 'model', 'year')
+            ->select('id', 'model')
             ->orderBy('model', 'asc')
             ->get();
 
