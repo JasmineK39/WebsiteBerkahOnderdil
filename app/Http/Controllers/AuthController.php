@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+
 
 class AuthController extends Controller
 {
@@ -27,7 +29,11 @@ class AuthController extends Controller
                 'email' => ['Kombinasi email dan password salah.'],
             ]);
         }
-
+        if ($user->status !== 'active') {
+            return response()->json([
+                'message' => 'Akun belum terverifikasi, silahkan cek email kode OTP.'
+            ], 403);
+        }
         // 4. GENERATE TOKEN (Bagian Inti Sanctum)
         // 'auth_token' hanyalah nama bebas untuk token ini
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -48,22 +54,89 @@ class AuthController extends Controller
             'phone' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed', // 'confirmed' berarti harus cocok dengan password_confirmation
         ]);
-        $request['status']="verify";
-        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password), // Password wajib di-hash
             'role' => 'customer', // Default role user baru adalah customer
+            'status' => 'verify',
         ]);
         $token = $user->createToken('auth_token')->plainTextToken;
+        $otp = strval(rand(100000, 999999));
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => now()->addMinutes(5),
+            'resend_count' => 0,
+            'last_resend_at' => now(),
+        ]);
+        $user->save();
 
+        Mail::to($user->email)->send(new \App\Mail\SendOtpMail($otp));
         return response()->json([
             'message' => 'Registrasi berhasil',
             'token' => $token,
             'user' => $user
         ], 201);
+    }
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || strval($user->otp) !== strval($request->otp)) {
+            return response()->json(['message' => 'Kode OTP salah'], 400);
+        }
+
+        if (now()->greaterThan($user->otp_expires_at)) {
+            return response()->json(['message' => 'Kode OTP expired'], 400);
+        }
+
+        $user->update([
+            'otp' => null,
+            'otp_expires_at' => null,
+            'status' => 'active',
+            'email_verified_at' => now(),
+        ]);
+
+        return response()->json(['message' => 'Verifikasi berhasil, silahkan login kembali','user' => $user]);
+       
+    }
+    public function resendOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) return response()->json(['message' => 'Email tidak ditemukan'], 404);
+         // Tambahkan cek 30 detik
+        if ($user->last_resend_at && $user->last_resend_at->addSeconds(30) > now()) {
+            return response()->json(['message' => 'Tunggu 30 detik sebelum resend'], 429);
+        }
+        if ($user->last_resend_at && $user->last_resend_at->addMinutes(10) < now()) {
+            $user->resend_count = 0;
+            $user->save();
+        }
+        // Cek limit
+        if ($user->resend_count >= 3) {
+            return response()->json(['message' => 'Maksimal 3 kali resend dalam 10 menit'], 429);
+        }
+        $otp = strval(rand(100000,999999));
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => now()->addMinutes(5),
+            'resend_count' => $user->resend_count + 1,
+            'last_resend_at' => now(),
+        ]);
+
+        Mail::to($user->email)->send(new \App\Mail\SendOtpMail($otp));
+
+        return response()->json(['message'=>'OTP baru telah dikirim']);
     }
 
     // Opsional: Logout

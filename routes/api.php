@@ -17,6 +17,8 @@ Route::get('/test', function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('auth/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('auth/resend-otp', [AuthController::class, 'resendOtp']);
 
 // Route utama sparepart
 Route::get('/spareparts', [SparepartController::class, 'index']);
@@ -26,7 +28,7 @@ Route::get('/brands', [ModelMobilController::class, 'getBrands']);
 Route::get('/models/{brand}', [ModelMobilController::class, 'getModelsByBrand']);
 
 
-Route::middleware('auth:sanctum','check_status')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();});
     Route::post('/logout', [AuthController::class, 'logout']);

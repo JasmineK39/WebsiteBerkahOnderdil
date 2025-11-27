@@ -19,8 +19,15 @@ class User extends Authenticatable
         'phone',
         'role',
         'status',
+        'otp',
+        'otp_expires_at',
+        'resend_count',
+        'last_resend_at'
     ];
-
+    protected $casts = [
+    'otp_expires_at' => 'datetime',
+    'last_resend_at' => 'datetime',
+    ];
     protected $hidden = ['password', 'remember_token'];
 
     public function keranjang()

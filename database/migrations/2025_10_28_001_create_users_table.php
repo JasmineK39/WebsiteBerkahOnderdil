@@ -15,7 +15,11 @@ return new class extends Migration {
             $table->string('password');
             $table->string('phone', 20);
             $table->enum('role', ['customer', 'admin'])->default('customer'); // customer = pembeli
-            $table->enum('status', ['verify', 'active','banned']);
+            $table->enum('status', ['verify', 'active','banned'])->default('verify');
+            $table->string('otp',6)->nullable();
+            $table->dateTime('otp_expires_at')->nullable();
+            $table->integer('resend_count')->default(0);
+            $table->timestamp('last_resend_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

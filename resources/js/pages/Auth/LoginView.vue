@@ -108,32 +108,40 @@ const handleLogin = async () => {
     errorMessage.value = '';
 
     try {
-        // 1. Request ke API Laravel (Pastikan route '/login' ada di api.php)
         const response = await axios.post('api/login', form);
-
-        // 2. Ambil Token dari response (Asumsi response: { token: 'abc...', user: {...} })
-        const token = response.data.token; 
+        const token = response.data.token;
         const user = response.data.user;
 
+        // Jika login berhasil dan user aktif
         authStore.setAuth(token, user);
 
-        // 4. Redirect ke Dashboard
         if (user.role === 'admin') {
-            // Jika Admin -> Masuk ke area Admin
-            window.location.href ='/admin'; // Sesuaikan dengan halaman pertama admin Anda
+            window.location.href ='/admin';
         } else {
-            // Jika Customer -> Masuk ke Katalog
             window.location.href ='/catalog';
         }
+
     } catch (error) {
-        // Handle Error
-        if (error.response && error.response.data.message) {
-            errorMessage.value = error.response.data.message;
+        if (error.response) {
+            if (error.response.status === 403) {
+                // User belum verifikasi OTP
+                localStorage.setItem('userEmail', form.email); // agar verify OTP bisa pakai email ini
+                errorMessage.value = error.response.data.message;
+                router.push('/verify-otp'); // redirect ke halaman OTP
+            } else if (error.response.data.message) {
+                errorMessage.value = error.response.data.message;
+            } else {
+                errorMessage.value = 'Terjadi kesalahan pada server.';
+            }
         } else {
-            errorMessage.value = 'Terjadi kesalahan pada server.';
+            errorMessage.value = 'Tidak dapat terhubung ke server.';
         }
     } finally {
         isLoading.value = false;
     }
+};
+// Optional: handle social login placeholder
+const handleSocialLogin = (provider) => {
+    alert(`Login dengan ${provider} belum diimplementasikan`);
 };
 </script>
