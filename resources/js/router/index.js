@@ -24,6 +24,8 @@ const routes = [
       { path: 'checkout', component: Checkout,meta: { requiresAuth: true }},
       { path: 'product/:id', component: ProductDetail },
       { path: 'request', name: 'request', component: Request,meta: { requiresAuth: true }},
+      { path: 'about', name: 'about', component: () => import('../pages/About.vue'), meta: { title: 'Tentang Kami' }},
+      { path: 'help', name: 'help', component: () => import('../pages/Help.vue'), meta: { title: 'Help/FAQ' }},
       { path: 'cart', component: Cart,meta: { requiresAuth: true }},
       ]
   },
@@ -43,13 +45,24 @@ const router = createRouter({
   routes,
 
   scrollBehavior(to, from, savedPosition) {
+    // Jika posisi sebelumnya (tombol Back)
     if (savedPosition) {
       return savedPosition;
-    } else {
-      return { top: 0, left: 0, behavior: 'smooth' }; // setiap pindah halaman, mulai dari atas
     }
+
+    // Jika ada hash (#lokasi-toko)
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: "smooth",
+      };
+    }
+
+    // Default: scroll ke atas
+    return { top: 0, left: 0, behavior: "smooth" };
   },
 });
+
 
 
 router.beforeEach((to, from, next) => {
@@ -93,4 +106,7 @@ router.afterEach((to) => {
   document.title = to.meta.title ? `Berkah Onderdil | ${to.meta.title}` : 'Berkah Onderdil';
 });
 
+
+
 export default router;
+

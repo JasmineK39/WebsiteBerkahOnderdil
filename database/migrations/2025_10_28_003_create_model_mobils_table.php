@@ -11,8 +11,6 @@ return new class extends Migration {
             $table->id(); // id_mobil
             $table->string('brand', 100);
             $table->string('model', 150);
-            $table->year('year')->nullable();
-            $table->text('description')->nullable();
             $table->string('image', 255)->nullable();
             $table->timestamps();
         });

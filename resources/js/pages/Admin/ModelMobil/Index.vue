@@ -16,8 +16,6 @@
           <th class="p-2 text-left">#</th>
           <th class="p-2 text-left">Brand</th>
           <th class="p-2 text-left">Model</th>
-          <th class="p-2 text-left">Tahun</th>
-          <th class="p-2 text-left">Deskripsi</th>
           <th class="p-2 text-left">Jml. Sparepart</th>
           <th class="p-2 text-left">Aksi</th>
         </tr>
@@ -27,8 +25,6 @@
           <td class="p-2">{{ i + 1 }}</td>
           <td class="p-2">{{ item.brand }}</td>
           <td class="p-2">{{ item.model }}</td>
-          <td class="p-2">{{ item.year || '-' }}</td>
-          <td class="p-2">{{ item.description || '-' }}</td>
           <td class="p-2">{{ item.spareparts ? item.spareparts.length : 0 }}</td>
           <td class="p-2 space-x-2">
             <RouterLink
