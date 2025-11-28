@@ -11,6 +11,7 @@ class MobilSeeder extends Seeder
     {
         $mobils = [
             ['brand' => 'Toyota', 'model' => 'Kijang Innova', 'image' => 'kijangInova.png'],
+<<<<<<< HEAD
             ['brand' => 'Daihatsu', 'model' => 'Avanza', 'image' => 'DaihatsuAvanza.png'],
             ['brand' => 'Honda', 'model' => 'Jazz', 'image' => 'Honda-Jazz.png'],
             ['brand' => 'Suzuki', 'model' => 'Swift', 'image' => 'Suzuki_Swift.png'],
@@ -19,6 +20,9 @@ class MobilSeeder extends Seeder
             ['brand' => 'Ford', 'model' => 'EcoSport', 'image' => 'Ford_EcoSport.png'],
             ['brand' => 'Chevrolet', 'model' => 'Captiva', 'image' => 'Chevrolet-Captiva.png'],
             ['brand' => 'BMW', 'model' => 'X1', 'image' => ''],
+=======
+            
+>>>>>>> a3f620247b6426ab1d9ed666e87477c3eef32f1b
         ];
 
         foreach ($mobils as $m) {
