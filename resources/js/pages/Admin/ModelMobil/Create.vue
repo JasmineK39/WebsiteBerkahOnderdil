@@ -38,30 +38,6 @@
         />
       </div>
 
-      <!-- Field Year -->
-      <div>
-        <label for="year" class="block mb-2 font-medium text-gray-700">Tahun (Opsional)</label>
-        <input 
-          id="year"
-          v-model="form.year" 
-          type="number"
-          class="w-full border border-gray-300 rounded-lg p-3 focus:ring-blue-500 focus:border-blue-500 transition duration-150" 
-          placeholder="Contoh: 2023"
-        />
-      </div>
-
-      <!-- Field Description -->
-      <div>
-        <label for="description" class="block mb-2 font-medium text-gray-700">Deskripsi (Opsional)</label>
-        <textarea
-          id="description"
-          v-model="form.description"
-          rows="3"
-          class="w-full border border-gray-300 rounded-lg p-3 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-          placeholder="Informasi detail tentang model mobil..."
-        ></textarea>
-      </div>
-
       <!-- Field Gambar -->
       <div>
         <label for="image" class="block mb-2 font-medium text-gray-700">Upload Gambar (Opsional)</label>
@@ -102,8 +78,6 @@ const generalError = ref(null) // State untuk error non-validasi (misal: 401, 50
 const form = reactive({
   brand: '',
   model: '',
-  year: '',
-  description: '',
   image: null // Mengubah ke null
 })
 

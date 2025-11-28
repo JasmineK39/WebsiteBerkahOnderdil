@@ -69,8 +69,6 @@ class ModelMobilController extends Controller
         $validator = Validator::make($request->all(), [
             'brand' => 'sometimes|string|max:255',
             'model' => 'sometimes|string|max:255',
-            'year' => "nullable|integer|digits:4|min:1886|max:$maxYear",
-            'description' => 'nullable|string',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 

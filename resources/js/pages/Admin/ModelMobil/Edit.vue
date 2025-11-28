@@ -58,8 +58,6 @@ const route = useRoute()
 const form = reactive({
   brand: '',
   model: '',
-  year: '',
-  description: '',
   image: '',
   old_image: null 
 })
@@ -91,8 +89,6 @@ const update = async () => {
   const formData = new FormData()
   formData.append('brand', form.brand)
   formData.append('model', form.model)
-  formData.append('year', form.year)
-  formData.append('description', form.description)
 
 
 if (form.image) {
