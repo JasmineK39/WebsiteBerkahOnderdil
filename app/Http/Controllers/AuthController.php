@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 
@@ -53,7 +54,19 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:150|unique:users', // Cek agar email tidak kembar
             'phone' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed', // 'confirmed' berarti harus cocok dengan password_confirmation
+            'captcha_token' => 'required',
         ]);
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret' => env('RECAPTCHA_SECRET'),
+        'response' => $request->captcha_token,
+    ]);
+
+    $result = $response->json();
+
+    if (!$result['success']) {
+        return response()->json(['error' => 'Captcha verification failed'], 422);
+    }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Berkah Onderdil</title>
   @vite(['resources/css/style.css', 'resources/js/main.js'])
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
   <div id="app"></div>

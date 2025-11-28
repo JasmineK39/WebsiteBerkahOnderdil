@@ -4,7 +4,6 @@ import { adminRoutes } from './admin';
 import MainLayout from '../components/layouts/MainLayout.vue';
 import AuthLayout from '../components/layouts/AuthLayout.vue';
 
-
 import Home from '../pages/Home.vue';
 import Catalog from '../pages/Catalog.vue';
 import Checkout from '../pages/Checkout.vue';

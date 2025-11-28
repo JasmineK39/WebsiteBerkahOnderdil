@@ -71,7 +71,6 @@
           </button>
         </div>
       </div>
-
       <!-- INPUT: Retype Password -->
       <div class="mb-6">
         <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password</label>
@@ -91,7 +90,14 @@
           {{ errors.password[0] }}
         </div>
       </div>
-      
+     <div style="min-height: 120px;">
+     <div v-if="showCaptcha"
+        id="recaptcha-container"
+        class="g-recaptcha"
+        :data-sitekey="RECAPTCHA_SITE_KEY"
+        data-callback="onCaptchaVerified"
+      ></div>
+      </div>
       <!-- TOMBOL REGISTER (Rata Kanan) -->
       <div class="flex justify-end mt-4">
         <button type="submit" 
@@ -132,11 +138,27 @@
 
 <script setup>
 import AuthLayout from '../../components/layouts/AuthLayout.vue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 // Import store auth agar state langsung update setelah register
 import { useAuthStore } from '../../store/auth'; 
+
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_KEY;
+const captchaToken = ref(null);
+
+function onCaptchaVerified(token) {
+    captchaToken.value = token;
+    form.captcha_token = token; // <-- WAJIB, baru terkirim ke backend
+    console.log('Captcha token:', token);
+  }
+const showCaptcha = ref(false);
+onMounted(() => {
+  window.onCaptchaVerified = onCaptchaVerified;
+  showCaptcha.value = true;
+});
+
+console.log(RECAPTCHA_SITE_KEY);
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -155,9 +177,17 @@ const form = reactive({
     password_confirmation: '', 
 });
 
+
+
 const handleRegister = async () => {
     errors.value = {};
     generalError.value = '';
+
+    if (!form.captcha_token) {
+    generalError.value = "Silakan selesaikan CAPTCHA terlebih dahulu.";
+    return;
+    }
+
     isLoading.value = true;
 
     try {

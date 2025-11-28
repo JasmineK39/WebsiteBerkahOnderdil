@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/request-sparepart', [SparepartRequestController::class, 'apiStore']);
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
-
+    
     // CRUD Sparepart
     Route::get('/spareparts', [AdminSparepartController::class, 'index']);
     Route::get('/spareparts/{id}', [AdminSparepartController::class, 'show']);
