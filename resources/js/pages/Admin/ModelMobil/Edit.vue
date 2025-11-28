@@ -21,10 +21,22 @@
         <input v-model="form.model" class="w-full border rounded p-2" required />
       </div>
 
-      <div class="mb-4">
-        <label class="block mb-1 font-medium">URL Gambar</label>
-        <input v-model="form.image" type="url" class="w-full border rounded p-2" placeholder="https://..." />
+        <div>
+        <label for="image" class="block mb-2 font-medium text-gray-700">Upload Gambar (Opsional)</label>
+        <input 
+          id="image"
+          type="file" 
+          @change="handleImage" 
+          class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" 
+          accept="image/*" 
+        />
       </div>
+
+      <div v-if="form.image && typeof form.image === 'string'" class="mb-3">
+    <img :src="getImageUrl(form.image)" class="w-28 h-20 object-cover rounded border" />
+      </div>
+
+      <br></br>
 
       <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
         Update
@@ -46,20 +58,25 @@ const route = useRoute()
 const form = reactive({
   brand: '',
   model: '',
-  year: '',
-  description: '',
-  image: ''
+  image: '',
+  old_image: null 
 })
 
 // 5. State untuk error validasi
 const errors = ref(null)
 
+const getImageUrl = (path) => `/storage/${path}`
+
+const handleImage = (e) => {
+  form.image = e.target.files[0] // ini wajib agar File terkirim
+}
+
 const loadData = async () => {
   try {
-    // 6. Endpoint GET diubah
     const res = await axios.get(`/api/admin/models/${route.params.id}`)
-    // Ini akan mengisi 'form' dengan data yang dimuat (brand, model, dll.)
     Object.assign(form, res.data)
+    form.old_image = res.data.image // simpan path lama
+    form.image = null 
   } catch (error) {
     console.error('Gagal memuat data:', error)
     alert('Gagal memuat data model mobil.')
@@ -67,19 +84,28 @@ const loadData = async () => {
 }
 
 const update = async () => {
-  errors.value = null // Reset error
+  errors.value = null
+
+  const formData = new FormData()
+  formData.append('brand', form.brand)
+  formData.append('model', form.model)
+
+
+if (form.image) {
+    formData.append('image', form.image)
+  }
+
   try {
-    // 7. Endpoint PUT diubah
-    await axios.put(`/api/admin/models/${route.params.id}`, form)
-    // 8. Redirect diubah
+    await axios.post(`/api/admin/models/${route.params.id}?_method=PUT`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
     router.push('/admin/models')
   } catch (error) {
-    // 9. Penanganan error validasi
     if (error.response && error.response.status === 422) {
       errors.value = error.response.data.errors
     } else {
-      console.error('Gagal mengupdate data:', error)
-      alert('Terjadi kesalahan saat mengupdate data.')
+      console.error(error)
+      alert('Gagal update data')
     }
   }
 }
