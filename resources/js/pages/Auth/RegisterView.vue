@@ -159,25 +159,18 @@ const handleRegister = async () => {
     errors.value = {};
     generalError.value = '';
     isLoading.value = true;
-
-    // Perbaikan Bug: form_confirmation tidak ada, diganti password_confirmation
-    if (form.password !== form.password_confirmation) {
-        // Bisa tambahkan alert manual jika mau, atau biarkan backend handle
-    }
-
     try {
         const response = await axios.post('/api/register', form);
 
-        // Update Pinia Store
-        authStore.setAuth(response.data.token, response.data.user);
+        // Simpan email user ke localStorage untuk OTP
+        localStorage.setItem('userEmail', response.data.user.email);
 
-        // Simpan LocalStorage (Backup)
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Optional: simpan token sementara jika perlu, tapi user belum bisa login
+        // localStorage.setItem('token', response.data.token);
 
-        alert('Registrasi Berhasil! Selamat datang.');
-        window.location.href ='/catalog';
-
+        alert('Registrasi berhasil! Silakan cek email untuk kode OTP.');
+        // Redirect ke halaman verify OTP
+        router.push('/verify-otp');
     } catch (error) {
         if (error.response && error.response.status === 422) {
             errors.value = error.response.data.errors;

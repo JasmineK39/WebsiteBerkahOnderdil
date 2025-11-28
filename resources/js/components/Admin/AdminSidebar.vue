@@ -8,35 +8,34 @@
       <RouterLink
         to="/admin"
         class="block px-5 py-2 rounded transition"
-        :class="linkClass('/admin')"
-      >
+        :class="linkClass('/admin')">
         Dashboard
       </RouterLink>
 
       <RouterLink
         to="/admin/spareparts"
         class="block px-5 py-2 rounded transition"
-        :class="linkClass('/admin/spareparts')"
-      >
+        :class="linkClass('/admin/spareparts')">
         Sparepart
       </RouterLink>
 
       <RouterLink
         to="/admin/models"
+
         class="block px-5 py-2 rounded transition"
-        :class="linkClass('/admin/models')"
-      >
+        :class="linkClass('/admin/models')">
         Model Mobil
       </RouterLink>
 
       <RouterLink
         to="/admin/requests"
+
         class="block px-5 py-2 rounded transition"
-        :class="linkClass('/admin/requests')"
-      >
+        :class="linkClass('/admin/requests')"      >
         Request
       </RouterLink>
     </nav>
+
 
     <footer class="p-4 border-t text-xs text-gray-400 text-center">
       © 2025 Berkah Onderdil

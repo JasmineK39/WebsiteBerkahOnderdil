@@ -12,7 +12,6 @@
       </section>
 
     </main>
-
   </div>
 </template>
 
@@ -27,4 +26,3 @@ const logout = () => {
   window.location.href = "/login";
 };
 </script>
-  

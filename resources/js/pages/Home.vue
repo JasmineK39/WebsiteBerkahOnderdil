@@ -20,23 +20,27 @@
           </div>
 
           <p class="text-xl md:text-2xl text-light-secondary mb-4 max-w-3xl mx-auto font-medium">
-            Pusat Sparepart Mobil Terlengkap & Terpercaya
+            Pusat Sparepart Belehan Mobil Terlengkap & Terpercaya
           </p>
           <p class="text-base md:text-lg text-light-secondary/80 mb-10 max-w-2xl mx-auto">
             Kualitas original, harga bersahabat, siap kirim ke seluruh Indonesia
           </p>
 
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <router-link to="/catalog">
             <button
               class="bg-white text-primary px-8 py-4 rounded-lg font-bold text-lg hover:bg-light hover:scale-105 transition-all duration-300 shadow-lg"
             >
               Lihat Katalog Lengkap
             </button>
+          </router-link>
+            <a href="https://wa.me/6281326553304" target="_blank">
             <button
               class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300"
             >
               Hubungi Kami
             </button>
+            </a>
           </div>
         </div>
       </div>
@@ -57,7 +61,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2 class="text-4xl md:text-5xl font-black text-light mb-4">
-            Katalog <span class="text-primary-light">Mobil</span>
+            Sparepart Tepat <span class="text-primary-light">Berdasarkan Mobil</span>
           </h2>
           <p class="text-gray text-lg max-w-2xl mx-auto">
             Temukan sparepart untuk berbagai merek dan tipe mobil favorit Anda
@@ -194,9 +198,10 @@
           Butuh Bantuan Menemukan Sparepart?
         </h2>
         <p class="text-light-secondary text-lg mb-8">
-          Tim kami siap membantu Anda 24/7 via WhatsApp atau telepon
+          Tim kami siap membantu Anda 24/7 via WhatsApp
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="https://wa.me/6281326553304" target="_blank">
           <button
             class="bg-white text-primary px-8 py-4 rounded-lg font-bold text-lg hover:bg-light hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center gap-2"
           >
@@ -207,11 +212,7 @@
             </svg>
             Chat via WhatsApp
           </button>
-          <button
-            class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300"
-          >
-            Telepon Sekarang
-          </button>
+          </a>
         </div>
       </div>
     </section>

@@ -22,16 +22,6 @@
       </div>
 
       <div class="mb-4">
-        <label class="block mb-1 font-medium">Tahun</label>
-        <input v-model="form.year" type="number" min="1886" :max="new Date().getFullYear()" class="w-full border rounded p-2" placeholder="Contoh: 2023" />
-      </div>
-
-      <div class="mb-4">
-        <label class="block mb-1 font-medium">Deskripsi</label>
-        <textarea v-model="form.description" class="w-full border rounded p-2" rows="3"></textarea>
-      </div>
-
-      <div class="mb-4">
         <label class="block mb-1 font-medium">URL Gambar</label>
         <input v-model="form.image" type="url" class="w-full border rounded p-2" placeholder="https://..." />
       </div>

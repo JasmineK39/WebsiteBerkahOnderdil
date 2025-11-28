@@ -11,16 +11,14 @@ use App\Http\Controllers\Api\ModelMobilController;
 use App\Http\Controllers\AuthController;
 
 // Tes route awal
-
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
-Route::post('/resend-otp', [AuthController::class, 'resendOtp']);
-
+Route::post('auth/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('auth/resend-otp', [AuthController::class, 'resendOtp']);
 
 // Route utama sparepart
 Route::get('/spareparts', [SparepartController::class, 'index']);
@@ -29,8 +27,7 @@ Route::get('/cars', [CarController::class, 'index']);
 Route::get('/brands', [ModelMobilController::class, 'getBrands']);
 Route::get('/models/{brand}', [ModelMobilController::class, 'getModelsByBrand']);
 
-
-Route::middleware('auth:sanctum','check_status')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();});
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -38,6 +35,7 @@ Route::middleware('auth:sanctum','check_status')->group(function () {
     Route::post('/request-sparepart', [SparepartRequestController::class, 'apiStore']);
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+    
     // CRUD Sparepart
     Route::get('/spareparts', [AdminSparepartController::class, 'index']);
     Route::get('/spareparts/{id}', [AdminSparepartController::class, 'show']);

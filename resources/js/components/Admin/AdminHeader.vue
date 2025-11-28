@@ -1,4 +1,5 @@
 <template>
+
   <header class="flex justify-between items-center bg-white border-b px-6 py-4 shadow-sm">
     
     <h1 class="text-xl font-semibold text-[#BA181B]">
@@ -15,7 +16,6 @@
         Logout
       </button>
     </div>
-
   </header>
 </template>
 
@@ -29,6 +29,7 @@ const computedTitle = computed(() => {
   if (route.path.includes("spareparts")) return "Kelola Sparepart";
   if (route.path.includes("models")) return "Kelola Model Mobil";
   if (route.path.includes("requests")) return "Daftar Request";
+
   return "Dashboard Admin";
 });
 </script>

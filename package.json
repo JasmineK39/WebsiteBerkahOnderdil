@@ -21,6 +21,7 @@
         "chart.js": "^4.5.1",
         "icheck-bootstrap": "^3.0.1",
         "jquery": "^3.7.1",
+        "@fortawesome/fontawesome": "^1.1.8",
         "pinia": "^3.0.4",
         "pinia-plugin-persistedstate": "^4.7.1",
         "vue": "^3.5.22",
