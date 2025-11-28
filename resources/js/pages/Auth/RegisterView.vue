@@ -91,12 +91,7 @@
         </div>
       </div>
      <div style="min-height: 120px;">
-     <div v-if="showCaptcha"
-        id="recaptcha-container"
-        class="g-recaptcha"
-        :data-sitekey="RECAPTCHA_SITE_KEY"
-        data-callback="onCaptchaVerified"
-      ></div>
+     <div id="recaptcha-container" class="g-recaptcha"></div>
       </div>
       <!-- TOMBOL REGISTER (Rata Kanan) -->
       <div class="flex justify-end mt-4">
@@ -153,10 +148,21 @@ function onCaptchaVerified(token) {
     console.log('Captcha token:', token);
   }
 const showCaptcha = ref(false);
+
 onMounted(() => {
-  window.onCaptchaVerified = onCaptchaVerified;
-  showCaptcha.value = true;
+  showCaptcha.value = true; // agar muncul
+
+  const interval = setInterval(() => {
+    if (window.grecaptcha) {
+      clearInterval(interval);
+      window.grecaptcha.render("recaptcha-container", {
+        sitekey: RECAPTCHA_SITE_KEY,
+        callback: onCaptchaVerified
+      });
+    }
+  }, 300);
 });
+
 
 console.log(RECAPTCHA_SITE_KEY);
 
@@ -175,9 +181,8 @@ const form = reactive({
     phone: '',
     password: '',
     password_confirmation: '', 
+    captcha_token: '',
 });
-
-
 
 const handleRegister = async () => {
     errors.value = {};
