@@ -46,4 +46,13 @@ class Sparepart extends Model
     {
         return $this->hasMany(TransactionItem::class);
     }
+
+    public function getImageUrlAttribute()
+{
+    if (!$this->image) {
+        return null;
+    }
+    return asset('storage/' . $this->image);
+}
+
 }

@@ -185,8 +185,19 @@ const submitForm = async () => {
   }
 }
 
+/* ---------- LOAD RIWAYAT REQUEST ---------- */
+const getRequests = async () => {
+  try {
+    const res = await axios.get('/api/request-sparepart')   // pastikan endpoint benar
+    requests.value = res.data
+  } catch (error) {
+    console.error("Gagal memuat riwayat:", error)
+  }
+}
+
 /* ---------- LOAD BRAND SAAT PERTAMA KALI ---------- */
 onMounted(() => {
   getBrands()
+  getRequests()
 })
 </script>
