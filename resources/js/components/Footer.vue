@@ -2,7 +2,6 @@
   <footer class="bg-linear-to-b from-[#660708] to-[#310304] text-[#D3D3D3] mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-
         <!-- About Section -->
         <div>
           <div class="flex items-center space-x-3 mb-4">
@@ -123,7 +122,6 @@
         <div>
           <h3 class="text-white font-bold text-lg mb-4 border-b-2 border-[#BA181B] pb-2 inline-block">Hubungi Kami</h3>
           <div class="space-y-4">
-
             <div class="flex items-start space-x-3">
               <div class="bg-[#660708] p-2 rounded-lg shrink-0">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,7 +150,6 @@
                 <p class="text-[#B1A7A6] text-xs mt-1">Senin - Sabtu: 08:00 - 17:00</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -175,5 +172,4 @@
 
 <script setup>
 </script>
-
 <style scoped></style>

@@ -184,7 +184,6 @@ const handleRegister = async () => {
     }
 
     isLoading.value = true;
-
     try {
         const response = await axios.post('/api/register', form);
 

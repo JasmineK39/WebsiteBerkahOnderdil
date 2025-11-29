@@ -29,7 +29,6 @@ Route::get('/cars', [CarController::class, 'index']);
 Route::get('/brands', [ModelMobilController::class, 'getBrands']);
 Route::get('/models/{brand}', [ModelMobilController::class, 'getModelsByBrand']);
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();});

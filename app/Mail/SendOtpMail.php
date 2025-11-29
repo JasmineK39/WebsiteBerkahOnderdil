@@ -3,12 +3,14 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 class SendOtpMail extends Mailable
 {
     use Queueable, SerializesModels;
+
 
     public $otp; // <-- agar bisa digunakan di email blade
 
@@ -19,6 +21,7 @@ class SendOtpMail extends Mailable
 
     public function build()
     {
+
         return $this->subject('Kode Verifikasi Akun Anda')
                     ->view('emails.send-otp'); // <-- arahkan ke file blade email
     }

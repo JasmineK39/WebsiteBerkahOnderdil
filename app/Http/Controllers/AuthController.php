@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
+
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -31,11 +32,13 @@ class AuthController extends Controller
                 'email' => ['Kombinasi email dan password salah.'],
             ]);
         }
+
         if ($user->status !== 'active') {
             return response()->json([
                 'message' => 'Akun belum terverifikasi, silahkan cek email kode OTP.'
             ], 403);
         }
+
         // 4. GENERATE TOKEN (Bagian Inti Sanctum)
         // 'auth_token' hanyalah nama bebas untuk token ini
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -49,10 +52,10 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        // 1. Validasi Input
+        // Validasi
         $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|string|email|max:150|unique:users', // Cek agar email tidak kembar
+            'email' => 'required|string|email|max:150|unique:users',
             'phone' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed', // 'confirmed' berarti harus cocok dengan password_confirmation
             'captcha_token' => 'required',
@@ -72,6 +75,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+
             'password' => Hash::make($request->password), // Password wajib di-hash
             'role' => 'customer', // Default role user baru adalah customer
             'status' => 'verify',
@@ -117,7 +121,7 @@ class AuthController extends Controller
                 'role' => 'customer',
             ]);}
          if($user&&$user->status==='banned'){
-            return redirect('/login')->with('error', 'Akun Anda dibanned. Silahkan hubungi admin.');
+            return redirect('/auth/login')->with('error', 'Akun Anda dibanned. Silahkan hubungi admin.');
         }
         $token = $user->createToken('auth_token')->plainTextToken;
 
