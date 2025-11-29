@@ -13,6 +13,9 @@ import VerifyOtpView from '../pages/Auth/VerifyOtpView.vue';
 import Cart from '../pages/Cart.vue';
 import LoginView from '../pages/Auth/LoginView.vue';
 import RegisterView from '../pages/Auth/RegisterView.vue';
+import ResetPassword from '../pages/Auth/ResetPassword.vue';
+import ForgotPassword from '../pages/Auth/ForgotPassword.vue';
+
 
 const routes = [
   { path: '/',  component: MainLayout,
@@ -28,12 +31,14 @@ const routes = [
       { path: 'cart', component: Cart,meta: { requiresAuth: true }},
       ]
   },
-  { path: '/', component: AuthLayout,
+  { path: '/auth', component: AuthLayout,
       children: [
       { path: 'login', name: 'login', component: LoginView},
       { path: 'register', name: 'register', component: RegisterView},
+      { path: 'forgot-password', name: 'forgot-password', component: ForgotPassword },
       { path: 'verify-otp', name: 'verify-otp', component: VerifyOtpView },
-      { path: 'forgot-password', component: { template: '<h1>Halaman Lupa Password Belum Dibuat</h1>' }},
+      { path: 'forgot-password', name: 'forgot-password', component: ForgotPassword },
+      { path: 'reset-password', name: 'reset-password', component: ResetPassword },
       ]
     },
    ...adminRoutes,
@@ -80,18 +85,18 @@ router.beforeEach((to, from, next) => {
 
    // Jika user login tapi belum verifikasi OTP
   if (token && user && user.status === 'verify') {
-    if (to.path !== '/verify-otp') {
-      return next('/verify-otp'); // redirect ke halaman OTP
+    if (to.path !== '/auth/verify-otp') {
+      return next('/auth/verify-otp'); // redirect ke halaman OTP
     }
   }
 
   if (requiresAuth && (!token || !user)) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    next('/login');
+    next('/auth/login');
   } else if (requiresAdmin && user?.role !== 'admin') {
     next('/');
-  } else if ((to.path === '/login' || to.path === '/register') && token && user && user.status === 'active') {
+  } else if ((to.path === '/auth/login' || to.path === '/auth/register') && token && user && user.status === 'active') {
     if (user.role === 'admin') {
         next('/admin'); // Admin ke Dashboard Admin
     } else {

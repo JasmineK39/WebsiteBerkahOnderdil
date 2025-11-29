@@ -71,7 +71,7 @@
         </p>
 
         <p class="text-gray-500 pt-2 border-t border-gray-100">
-          <router-link to="/login" class="text-blue-600 hover:text-blue-700">
+          <router-link to="/auth/login" class="text-blue-600 hover:text-blue-700">
             &larr; Kembali ke Halaman Login
           </router-link>
         </p>
@@ -129,7 +129,7 @@ const verifyOtp = async () => {
 
     message.value = "Verifikasi berhasil! Silahkan login.";
     isError.value = false;
-    setTimeout(() => window.location.href = "/login", 1500);
+    setTimeout(() => window.location.href = "/auth/login", 1500);
   } catch (err) {
     message.value = err.response?.data?.message || "OTP salah!";
     isError.value = true;

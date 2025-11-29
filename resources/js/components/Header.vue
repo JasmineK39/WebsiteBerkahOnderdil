@@ -51,11 +51,11 @@
 
 
           <template v-if="!isAuthenticated">
-            <router-link to="/login" class="hidden md:block px-5 py-2.5 text-black bg-[#FFD60A] backdrop-blur-sm border-2 border-[#FFD60A] rounded-lg hover:bg-white hover:text-[#BA181B] hover:border-white transition-all font-semibold text-sm shadow-lg">
+            <router-link to="/auth/login" class="hidden md:block px-5 py-2.5 text-black bg-[#FFD60A] backdrop-blur-sm border-2 border-[#FFD60A] rounded-lg hover:bg-white hover:text-[#BA181B] hover:border-white transition-all font-semibold text-sm shadow-lg">
               Masuk
             </router-link>
             
-            <router-link to="/register" class="hidden md:block px-5 py-2.5 text-white bg-white/10 backdrop-blur-sm border-2 border-white rounded-lg hover:bg-white hover:text-[#BA181B] transition-all font-semibold text-sm shadow-lg">
+            <router-link to="/auth/register" class="hidden md:block px-5 py-2.5 text-white bg-white/10 backdrop-blur-sm border-2 border-white rounded-lg hover:bg-white hover:text-[#BA181B] transition-all font-semibold text-sm shadow-lg">
               Daftar
             </router-link>
           </template>
@@ -109,11 +109,11 @@
           </router-link>
 
           <template v-if="!isAuthenticated">
-            <router-link to="/login" @click="mobileMenuOpen = false" class="block text-center w-full px-4 py-3 text-white border-2 border-[#E5383B] rounded-lg hover:bg-[#E5383B] transition-all font-semibold mt-2">
+            <router-link to="/auth/login" @click="mobileMenuOpen = false" class="block text-center w-full px-4 py-3 text-white border-2 border-[#E5383B] rounded-lg hover:bg-[#E5383B] transition-all font-semibold mt-2">
               Masuk
             </router-link>
 
-            <router-link to="/register" @click="mobileMenuOpen = false" class="block text-center w-full px-4 py-3 text-[#161A1D] bg-[#FFD60A] rounded-lg hover:bg-yellow-300 transition-all font-semibold mt-2">
+            <router-link to="/auth/register" @click="mobileMenuOpen = false" class="block text-center w-full px-4 py-3 text-[#161A1D] bg-[#FFD60A] rounded-lg hover:bg-yellow-300 transition-all font-semibold mt-2">
               Daftar
             </router-link>
           </template>

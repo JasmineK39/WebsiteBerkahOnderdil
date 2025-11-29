@@ -113,20 +113,10 @@
     <div class="mt-8 space-y-2 text-center text-sm">
       <p class="text-gray-600">
         Sudah punya akun? 
-        <router-link to="/login" class="text-red-600 font-medium hover:text-red-700">
+        <router-link to="/auth/login" class="text-red-600 font-medium hover:text-red-700">
           Login
         </router-link>
       </p>
-      
-      <!-- SOSIAL MEDIA -->
-      <div class="relative flex py-5 items-center">
-          <div class="flex-grow border-t border-gray-300"></div>
-          <span class="flex-shrink mx-4 text-gray-400">- OR -</span>
-          <div class="flex-grow border-t border-gray-300"></div>
-      </div>
-      <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
-        <i class="fab fa-google-plus mr-2 text-red-500"></i> Daftar menggunakan Google
-      </button>
     </div>
   </div>
 </template>
@@ -206,7 +196,7 @@ const handleRegister = async () => {
 
         alert('Registrasi berhasil! Silakan cek email untuk kode OTP.');
         // Redirect ke halaman verify OTP
-        router.push('/verify-otp');
+        router.push('/auth/verify-otp');
 
     } catch (error) {
         if (error.response && error.response.status === 422) {

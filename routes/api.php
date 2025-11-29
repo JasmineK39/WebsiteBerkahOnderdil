@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\SparepartRequestController;
 use App\Http\Controllers\Api\ModelMobilController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordResetController;
 
 // Tes route awal
 Route::get('/test', function () {
@@ -17,9 +18,10 @@ Route::get('/test', function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('auth/verify-otp', [AuthController::class, 'verifyOtp']);
-Route::post('auth/resend-otp', [AuthController::class, 'resendOtp']);
-
+Route::post('/auth/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/auth/resend-otp', [AuthController::class, 'resendOtp']);
+Route::post('/auth/forgot-password', [PasswordResetController::class,'sendResetLink'])->middleware('throttle:5,1');
+Route::post('/auth/reset-password', [PasswordResetController::class,'resetPassword']);
 // Route utama sparepart
 Route::get('/spareparts', [SparepartController::class, 'index']);
 Route::get('/spareparts/{id}', [SparepartController::class, 'show']);
@@ -35,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/request-sparepart', [SparepartRequestController::class, 'apiIndex']);
     Route::post('/request-sparepart', [SparepartRequestController::class, 'apiStore']);
 
-Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+Route::middleware(['admin'])->prefix('admin')->group(function () {
     
     // CRUD Sparepart
     Route::get('/spareparts', [AdminSparepartController::class, 'index']);
