@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
-
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -91,6 +92,39 @@ class AuthController extends Controller
             'token' => $token,
             'user' => $user
         ], 201);
+    }
+    public function google_redirect()
+    {
+        /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+        $driver = Socialite::driver('google');
+
+        return $driver->stateless()->redirect();
+    }
+    public function google_callback()
+    {
+        /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+        $driver = Socialite::driver('google');
+        
+        $googleUser = $driver->stateless()->user();
+        $user = User::where('email', $googleUser->getEmail())->first();
+         if (!$user) {
+            $user = User::create([
+                'name' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'google_id' => $googleUser->getId(),
+                'password' => bcrypt(uniqid()),
+                'status' => 'active',
+                'role' => 'customer',
+            ]);}
+         if($user&&$user->status==='banned'){
+            return redirect('/login')->with('error', 'Akun Anda dibanned. Silahkan hubungi admin.');
+        }
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Redirect back to the frontend SPA so it can store the token.
+        // Use URL fragment (hash) instead of query param so token is not sent to server.
+        $redirectUrl = url('/') . '#token=' . $token;
+        return redirect()->to($redirectUrl);
     }
     public function verifyOtp(Request $request)
     {

@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SparepartController;
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardAdminController::class, 'index'])
-        ->name('admin.dashboard');
-});
+use App\Http\Controllers\AuthController;
+
+Route::get('/auth/google/redirect', [AuthController::class, 'google_redirect']);
+Route::get('/auth/google/callback', [AuthController::class, 'google_callback']);
+
 //Request
 Route::get('/', function () {
     return view('welcome');
