@@ -138,7 +138,7 @@ import { useAuthStore } from '../store/auth'
 const keyword = ref('')
 const router = useRouter()
 const mobileMenuOpen = ref(false)
-const cartCount = ref(2) 
+
 
 // Auth Logic
 const authStore = useAuthStore() // Error handle: pastikan file ini ada
