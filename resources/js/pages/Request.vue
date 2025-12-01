@@ -17,37 +17,32 @@
         <form @submit.prevent="submitForm" class="bg-red-800 text-white p-6 rounded-xl shadow-lg mb-10">
           <div class="grid md:grid-cols-2 gap-4">
 
-            <!-- Dropdown Merek -->
-            <div>
-              <label class="block mb-2 font-medium">Merek Mobil</label>
-              <select 
-                v-model="form.brand_req" 
-                @change="loadModels"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"
-                required
-              >
-                <option disabled value="">Pilih Merek Mobil</option>
-                <option v-for="b in brands" :key="b.brand" :value="b.brand">
-                  {{ b.brand }}
-                </option>
-              </select>
-            </div>
+            <!-- Input Merek -->
+<div>
+  <label class="block mb-2 font-medium">Merek Mobil</label>
+  <input 
+    v-model="form.brand_req" 
+    type="text" 
+    placeholder="Contoh: Toyota"
+    class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black 
+           placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none"
+    required
+  >
+</div>
 
-            <!-- Dropdown Model -->
-            <div>
-              <label class="block mb-2 font-medium">Model Mobil</label>
-              <select 
-                v-model="form.model_req" 
-                :disabled="models.length === 0"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"
-                required
-              >
-                <option disabled value="">Pilih Model Mobil</option>
-                <option v-for="m in models" :key="m.id" :value="m.model">
-                  {{ m.model }} 
-                </option>
-              </select>
-            </div>
+            <!-- Input Model -->
+<div>
+  <label class="block mb-2 font-medium">Model Mobil</label>
+  <input 
+    v-model="form.model_req" 
+    type="text" 
+    placeholder="Contoh: Avanza"
+    class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black 
+           placeholder-gray-400 focus:ring-2 focus:ring-red-500 outline-none"
+    required
+  >
+</div>
+
 
             <!-- Tahun -->
             <div>
@@ -185,8 +180,19 @@ const submitForm = async () => {
   }
 }
 
+/* ---------- LOAD RIWAYAT REQUEST ---------- */
+const getRequests = async () => {
+  try {
+    const res = await axios.get('/api/request-sparepart')   // pastikan endpoint benar
+    requests.value = res.data
+  } catch (error) {
+    console.error("Gagal memuat riwayat:", error)
+  }
+}
+
 /* ---------- LOAD BRAND SAAT PERTAMA KALI ---------- */
 onMounted(() => {
   getBrands()
+  getRequests()
 })
 </script>

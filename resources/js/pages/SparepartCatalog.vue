@@ -16,6 +16,14 @@
           :key="part.id"
           class="bg-dark border border-gray-700 rounded-xl p-4 hover:border-primary transition-all"
         >
+
+        <!-- GAMBAR SPAREPART -->
+  <img
+    :src="part.image"
+    :alt="part.name"
+    class="w-full h-40 object-cover rounded-lg mb-3"
+  />
+        
           <h3 class="text-lg font-bold text-primary mb-2">{{ part.name }}</h3>
           <p class="text-white/70 text-sm mb-1">{{ part.brand }}</p>
           <p class="text-white/70 text-sm mb-1">Grade: {{ part.grade }}</p>

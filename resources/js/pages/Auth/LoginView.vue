@@ -61,24 +61,25 @@
     
     <div class="text-center mt-2 mb-3">
       <div class="relative flex py-5 items-center">
-          <div class="flex-grow border-t border-gray-300"></div>
-          <span class="flex-shrink mx-4 text-gray-400 text-sm">- OR -</span>
-          <div class="flex-grow border-t border-gray-300"></div>
+          <div class="grow border-t border-gray-300"></div>
+          <span class="shrink mx-4 text-gray-400 text-sm">- OR -</span>
+          <div class="grow border-t border-gray-300"></div>
       </div>
       
       <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition" @click="handleSocialLogin('google')">
-        <i class="fab fa-google-plus mr-2 text-red-500"></i> Log In using Google
+        <router-link to="/auth/google/redirect"></router-link>
+        <i class="fab fa-google google-color mr-2 text-red-500"></i> Log In using Google
       </button>
     </div>
 
     <p class="mb-2 text-center text-sm">
-      <router-link to="/forgot-password" class="text-red-600 hover:text-red-700">
+      <router-link to="/auth/forgot-password" class="text-red-600 hover:text-red-700">
         I forgot my password
       </router-link>
     </p>
 
     <p class="mb-0 text-center text-sm">
-      <router-link to="/register" class="text-red-600 font-medium hover:text-red-700">
+      <router-link to="/auth/register" class="text-red-600 font-medium hover:text-red-700">
         Register a new membership
       </router-link>
     </p>
@@ -127,7 +128,7 @@ const handleLogin = async () => {
                 // User belum verifikasi OTP
                 localStorage.setItem('userEmail', form.email); // agar verify OTP bisa pakai email ini
                 errorMessage.value = error.response.data.message;
-                router.push('/verify-otp'); // redirect ke halaman OTP
+                router.push('/auth/verify-otp'); // redirect ke halaman OTP
             } else if (error.response.data.message) {
                 errorMessage.value = error.response.data.message;
             } else {
@@ -141,7 +142,11 @@ const handleLogin = async () => {
     }
 };
 // Optional: handle social login placeholder
-const handleSocialLogin = (provider) => {
-    alert(`Login dengan ${provider} belum diimplementasikan`);
+const handleSocialLogin = () => {
+       window.location.href = "http://localhost:8000/auth/google/redirect";
 };
 </script>
+
+<style scoped>
+
+</style>

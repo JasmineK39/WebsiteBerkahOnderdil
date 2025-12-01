@@ -90,14 +90,17 @@ const props = defineProps({
 
 onMounted(() => {
   // USER CHART
+  const userLabels = (props.userPerMonth || []).map(x => "Bulan " + x.bulan);
+  const userData = (props.userPerMonth || []).map(x => x.total);
+
   new Chart(document.getElementById("userChart"), {
     type: "line",
     data: {
-      labels: props.userPerMonth.map(x => "Bulan " + x.bulan),
+      labels: userLabels,
       datasets: [
         {
           label: "User Baru",
-          data: props.userPerMonth.map(x => x.total),
+          data: userData,
           borderColor: "#BA181B",
           backgroundColor: "#E5383B55",
           borderWidth: 2,
@@ -108,14 +111,17 @@ onMounted(() => {
   });
 
   // SPAREPART CHART
+  const spareLabels = (props.sparepartPerMonth || []).map(x => "Bulan " + x.bulan);
+  const spareData = (props.sparepartPerMonth || []).map(x => x.total);
+
   new Chart(document.getElementById("sparepartChart"), {
     type: "bar",
     data: {
-      labels: props.sparepartPerMonth.map(x => "Bulan " + x.bulan),
+      labels: spareLabels,
       datasets: [
         {
           label: "Sparepart Masuk",
-          data: props.sparepartPerMonth.map(x => x.total),
+          data: spareData,
           backgroundColor: "#660708",
           borderRadius: 6,
         },
