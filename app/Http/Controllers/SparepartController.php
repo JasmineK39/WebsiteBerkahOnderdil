@@ -43,28 +43,17 @@ class SparepartController extends Controller
             });
         }
 
-<<<<<<< HEAD
-        $spareparts = $query->paginate(12);
-=======
         $spareparts = $query->get()->map(function ($item) {
     if ($item->image) {
         $item->image = asset('storage/' . $item->image);
     }
     return $item;
 });
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 
         return response()->json($spareparts);
     }
 
     public function show($id)
-<<<<<<< HEAD
-    {
-        $sparepart = Sparepart::with('modelMobil', 'kategoris')->findOrFail($id);
-        return response()->json($sparepart);
-    }
-
-=======
 {
     $sparepart = Sparepart::with('modelMobil', 'kategoris')->findOrFail($id);
 
@@ -75,8 +64,6 @@ class SparepartController extends Controller
     return response()->json($sparepart);
 }
 
-
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
     public function store(Request $request)
 {
     $data = $request->validate([

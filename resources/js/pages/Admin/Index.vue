@@ -1,9 +1,6 @@
 <template>
-<<<<<<< HEAD
-  <div>
-=======
+
   <div class="p-6">
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 
     <!-- TITLE -->
     <h1 class="text-3xl font-bold text-[#161A1D] mb-6">
@@ -12,10 +9,7 @@
 
     <!-- ==== STATISTIC CARDS ==== -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-<<<<<<< HEAD
 
-=======
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
       <div class="p-5 bg-white shadow rounded-xl border-l-4 border-[#BA181B]">
         <h2 class="text-sm text-[#660708] font-semibold">Total User</h2>
         <p class="text-3xl font-bold text-[#161A1D] mt-1">{{ totalUser }}</p>
@@ -27,24 +21,15 @@
       </div>
 
       <div class="p-5 bg-white shadow rounded-xl border-l-4 border-[#660708]">
-<<<<<<< HEAD
-        <h2 class="text-sm text-[#161A1D] font-semibold">Sparepart Masuk Bulan Ini</h2>
-        <p class="text-3xl font-bold">{{ sparepartBulanan }}</p>
-      </div>
 
-=======
         <h2 class="text-sm text-[#161A1D] font-semibold">Total Penjualan</h2>
         <p class="text-3xl font-bold">{{ totalPenjualan }}</p>
       </div>
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
     </div>
 
     <!-- ==== CHARTS ==== -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-<<<<<<< HEAD
 
-=======
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
       <!-- User Chart -->
       <div class="bg-white p-6 rounded-xl shadow border">
         <h3 class="text-lg font-bold text-[#161A1D] mb-3">Grafik User</h3>
@@ -53,16 +38,11 @@
 
       <!-- Sparepart Chart -->
       <div class="bg-white p-6 rounded-xl shadow border">
-<<<<<<< HEAD
+
         <h3 class="text-lg font-bold text-[#161A1D] mb-3">Grafik Sparepart</h3>
         <canvas id="sparepartChart"></canvas>
       </div>
 
-=======
-        <h3 class="text-lg font-bold text-[#161A1D] mb-3">Riwayat Checkout</h3>
-      <canvas id="checkoutChart"></canvas>
-      </div>
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
     </div>
 
     <!-- ==== TABEL SPAREPART TERBARU ==== -->
@@ -92,19 +72,12 @@
           </tr>
         </tbody>
       </table>
-<<<<<<< HEAD
 
-=======
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
     </div>
 
   </div>
 </template>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 <script setup>
 import { Chart, registerables } from "chart.js";
 import { onMounted } from "vue";
@@ -112,16 +85,7 @@ import { onMounted } from "vue";
 Chart.register(...registerables);
 
 const props = defineProps({
-<<<<<<< HEAD
-  totalUser: { type: Number, default: 0 },
-  totalSparepart: { type: Number, default: 0 },
-  sparepartBulanan: { type: Number, default: 0 },
-  latestSpareparts: { type: Array, default: () => [] },
-  userPerMonth: { type: Array, default: () => [] },
-  sparepartPerMonth: { type: Array, default: () => [] }
-});
 
-=======
   totalUser: Number,
   totalSparepart: Number,
   totalPenjualan: Number,
@@ -130,8 +94,6 @@ const props = defineProps({
   checkoutPerMonth: Array
 });
 
-
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 onMounted(() => {
   // USER CHART
   const userLabels = (props.userPerMonth || []).map(x => "Bulan " + x.bulan);
@@ -148,17 +110,11 @@ onMounted(() => {
           borderColor: "#BA181B",
           backgroundColor: "#E5383B55",
           borderWidth: 2,
-<<<<<<< HEAD
-          tension: 0.3
-        }
-      ]
-    }
-=======
+
           tension: 0.3,
         },
       ],
     },
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
   });
 
   // SPAREPART CHART
@@ -174,15 +130,6 @@ onMounted(() => {
           label: "Sparepart Masuk",
           data: spareData,
           backgroundColor: "#660708",
-<<<<<<< HEAD
-          borderRadius: 6
-        }
-      ]
-    }
-  });
-});
-</script>
-=======
           borderRadius: 6,
         },
       ],
@@ -191,4 +138,3 @@ onMounted(() => {
 });
 
 </script>
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c

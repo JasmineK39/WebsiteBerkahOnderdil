@@ -16,40 +16,6 @@
         <!-- Form Request -->
         <form @submit.prevent="submitForm" class="bg-red-800 text-white p-6 rounded-xl shadow-lg mb-10">
           <div class="grid md:grid-cols-2 gap-4">
-
-<<<<<<< HEAD
-            <!-- Dropdown Merek -->
-            <div>
-              <label class="block mb-2 font-medium">Merek Mobil</label>
-              <select 
-                v-model="form.brand_req" 
-                @change="loadModels"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"
-                required
-              >
-                <option disabled value="">Pilih Merek Mobil</option>
-                <option v-for="b in brands" :key="b.brand" :value="b.brand">
-                  {{ b.brand }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Dropdown Model -->
-            <div>
-              <label class="block mb-2 font-medium">Model Mobil</label>
-              <select 
-                v-model="form.model_req" 
-                :disabled="models.length === 0"
-                class="w-full px-3 py-2 rounded border border-red-700 bg-white text-black focus:ring-2 focus:ring-red-500 outline-none"
-                required
-              >
-                <option disabled value="">Pilih Model Mobil</option>
-                <option v-for="m in models" :key="m.id" :value="m.model">
-                  {{ m.model }} 
-                </option>
-              </select>
-            </div>
-=======
             <!-- Input Merek -->
 <div>
   <label class="block mb-2 font-medium">Merek Mobil</label>
@@ -75,8 +41,6 @@
     required
   >
 </div>
-
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 
             <!-- Tahun -->
             <div>
@@ -214,11 +178,6 @@ const submitForm = async () => {
   }
 }
 
-<<<<<<< HEAD
-/* ---------- LOAD BRAND SAAT PERTAMA KALI ---------- */
-onMounted(() => {
-  getBrands()
-=======
 /* ---------- LOAD RIWAYAT REQUEST ---------- */
 const getRequests = async () => {
   try {
@@ -233,6 +192,5 @@ const getRequests = async () => {
 onMounted(() => {
   getBrands()
   getRequests()
->>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 })
 </script>
