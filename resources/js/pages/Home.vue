@@ -33,8 +33,7 @@
             >
               Lihat Katalog Lengkap
             </button>
-            </router-link>
-            
+          </router-link>
             <a href="https://wa.me/6281326553304" target="_blank">
             <button
               class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300"
@@ -42,7 +41,6 @@
               Hubungi Kami
             </button>
             </a>
-
           </div>
         </div>
       </div>

@@ -16,7 +16,6 @@
       <p class="text-yellow-600 font-semibold text-sm mb-2">
         Cek Sparepart Sekarang →
       </p>
-
     </div>
   </router-link>
 </template>

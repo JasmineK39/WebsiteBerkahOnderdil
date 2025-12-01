@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Socialite\Facades\Socialite;
 
 
 class AuthController extends Controller
@@ -29,11 +32,13 @@ class AuthController extends Controller
                 'email' => ['Kombinasi email dan password salah.'],
             ]);
         }
+
         if ($user->status !== 'active') {
             return response()->json([
                 'message' => 'Akun belum terverifikasi, silahkan cek email kode OTP.'
             ], 403);
         }
+
         // 4. GENERATE TOKEN (Bagian Inti Sanctum)
         // 'auth_token' hanyalah nama bebas untuk token ini
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -47,17 +52,30 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
-        // 1. Validasi Input
+        // Validasi
         $request->validate([
             'name' => 'required|string|max:100',
-            'email' => 'required|string|email|max:150|unique:users', // Cek agar email tidak kembar
+            'email' => 'required|string|email|max:150|unique:users',
             'phone' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed', // 'confirmed' berarti harus cocok dengan password_confirmation
+            'captcha_token' => 'required',
         ]);
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        'secret' => env('RECAPTCHA_SECRET'),
+        'response' => $request->captcha_token,
+    ]);
+
+    $result = $response->json();
+
+    if (!$result['success']) {
+        return response()->json(['error' => 'Captcha verification failed'], 422);
+    }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+
             'password' => Hash::make($request->password), // Password wajib di-hash
             'role' => 'customer', // Default role user baru adalah customer
             'status' => 'verify',
@@ -78,6 +96,39 @@ class AuthController extends Controller
             'token' => $token,
             'user' => $user
         ], 201);
+    }
+    public function google_redirect()
+    {
+        /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+        $driver = Socialite::driver('google');
+
+        return $driver->stateless()->redirect();
+    }
+    public function google_callback()
+    {
+        /** @var \Laravel\Socialite\Two\GoogleProvider $driver */
+        $driver = Socialite::driver('google');
+        
+        $googleUser = $driver->stateless()->user();
+        $user = User::where('email', $googleUser->getEmail())->first();
+         if (!$user) {
+            $user = User::create([
+                'name' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'google_id' => $googleUser->getId(),
+                'password' => bcrypt(uniqid()),
+                'status' => 'active',
+                'role' => 'customer',
+            ]);}
+         if($user&&$user->status==='banned'){
+            return redirect('/auth/login')->with('error', 'Akun Anda dibanned. Silahkan hubungi admin.');
+        }
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Redirect back to the frontend SPA so it can store the token.
+        // Use URL fragment (hash) instead of query param so token is not sent to server.
+        $redirectUrl = url('/') . '#token=' . $token;
+        return redirect()->to($redirectUrl);
     }
     public function verifyOtp(Request $request)
     {

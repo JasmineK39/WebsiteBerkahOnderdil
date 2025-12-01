@@ -1,17 +1,16 @@
 <template>
-  <div class="flex min-h-screen bg-gray-100">
-    <!-- Sidebar -->
+  <div class="flex min-h-screen bg-[#F5F5F5]">
+    
     <AdminSidebar />
 
-    <!-- Main content -->
     <main class="flex-1 flex flex-col">
-      <!-- Header -->
+
       <AdminHeader @logout="logout" />
 
-      <!-- Halaman admin ditampilkan di sini -->
       <section class="p-6 flex-1 overflow-y-auto">
         <RouterView />
       </section>
+
     </main>
   </div>
 </template>
@@ -21,10 +20,9 @@ import AdminSidebar from "@/components/Admin/AdminSidebar.vue";
 import AdminHeader from "@/components/Admin/AdminHeader.vue";
 
 const logout = () => {
-  alert("Logout berhasil (implementasi bisa disesuaikan nanti)");
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.location.href = "/auth/login";
 };
 </script>
-
-<style scoped>
-/* kamu bisa tambahkan styling tambahan di sini kalau perlu */
-</style>
