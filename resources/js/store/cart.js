@@ -12,6 +12,7 @@ export const useCartStore = defineStore('cart', {
       try {
         const res = await axios.get('/api/cart')
 
+
         // Menyeragamkan properti kuantitas menjadi 'quantity'
         this.items = (res.data.items || []).map(i => ({
           ...i,
@@ -25,21 +26,26 @@ export const useCartStore = defineStore('cart', {
         if (error.response && error.response.status === 401) {
             this.items = []; 
         }
+
       }
     },
 
     async addToCart(sparepart) {
       try {
+
         await axios.post('/api/cart', {
+
           sparepart_id: sparepart.id,
           quantity: 1
         })
         await this.fetchCart()
+
       } catch (error) {
         // Fallback local: menggunakan 'quantity'
         const existing = this.items.find(i => i.id === sparepart.id)
         if (existing) existing.quantity++
         else this.items.push({ ...sparepart, quantity: 1 }) // Gunakan 'quantity'
+
       }
     },
 
@@ -54,6 +60,7 @@ export const useCartStore = defineStore('cart', {
       const item = this.items.find(i => i.id === id)
       if (!item) return
       if (item.quantity > 1) item.quantity--
+
       else this.items = this.items.filter(i => i.id !== id)
     },
 
@@ -63,4 +70,5 @@ export const useCartStore = defineStore('cart', {
   },
 
   persist: true,
+
 })

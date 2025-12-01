@@ -20,6 +20,7 @@ import ReviewStore from '../pages/ReviewStore.vue';
 import OrderHistory from '../pages/OrderHistory.vue';
 
 
+
 const routes = [
   { path: '/',  component: MainLayout,
      children: [
@@ -35,6 +36,7 @@ const routes = [
       { path: '/checkout-confirm/:id', name: 'CheckoutConfirm', component: CheckoutConfirm, props: true, },
       { path: '/review/:id', name: 'ReviewStore', component: ReviewStore, props: true },
       { path: '/orders', name: 'OrderHistory', component: OrderHistory, meta: { requiresAuth: true }},
+
       ]
   },
   { path: '/auth', component: AuthLayout,

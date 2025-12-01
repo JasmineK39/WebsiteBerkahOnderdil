@@ -10,7 +10,14 @@ class SparepartRequestController extends Controller
 {
     public function apiIndex()
     {
+<<<<<<< HEAD
         return RequestSparepart::where('user_id', Auth::id())->get();
+=======
+        return RequestSparepart::where('user_id', Auth::id())
+    ->orderBy('created_at', 'desc')
+    ->get();
+
+>>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
     }
 
     public function apiStore(Request $request)

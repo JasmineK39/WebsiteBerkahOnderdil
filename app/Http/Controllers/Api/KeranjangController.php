@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Keranjang;
 use App\Models\ItemCard;
 use App\Models\Sparepart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Log; // Import Log Facade
 
 class KeranjangController extends Controller
@@ -16,9 +18,11 @@ class KeranjangController extends Controller
     /**
      * Tampilkan isi keranjang
      * Endpoint: GET /api/cart
+
      */
     public function index()
     {
+
         if (Auth::check()) {
             $user = Auth::user();
             
@@ -26,6 +30,7 @@ class KeranjangController extends Controller
             $keranjang = $user->keranjang()->firstOrCreate(['user_id' => $user->id]);
             
             $items = $keranjang->items()->with('sparepart')->get()->map(function ($item) {
+
                 // Tambahkan pengecekan ini untuk memastikan ItemCard tidak merujuk ke Sparepart yang sudah dihapus
                 if (!$item->sparepart) {
                     // Item ini tidak valid, abaikan (atau hapus dari DB, tergantung kebijakan)
@@ -36,11 +41,13 @@ class KeranjangController extends Controller
                 // Pastikan harga adalah angka yang valid, fallback ke 0 jika null/tidak ada
                 $finalPrice = $item->price ?? $item->sparepart->price ?? 0;
                 
+
                 return [
                     'id' => $item->sparepart_id, 
                     'keranjang_item_id' => $item->id, 
                     'name' => $item->sparepart->name,
                     'price' => $finalPrice, 
+
                     'quantity' => $item->quantity,
                     'image' => $item->sparepart->image,
                 ];
@@ -48,7 +55,6 @@ class KeranjangController extends Controller
 
             return response()->json(['items' => $items]);
         }
-
         return response()->json(['items' => []], 401);
     }
 
@@ -76,6 +82,7 @@ class KeranjangController extends Controller
             DB::beginTransaction();
             
             $sparepart = Sparepart::findOrFail($sparepartId);
+
             
             // 💡 PERBAIKAN KRITIS UNTUK ERROR 500: Ambil harga Sparepart dan pastikan itu bukan NULL.
             // Jika price dari sparepart null, defaultkan ke 0.
@@ -97,26 +104,33 @@ class KeranjangController extends Controller
                     $itemCard->quantity = $newQuantity;
                     $itemCard->save();
                 } else {
+
                     // Jika kuantitas baru <= 0, hapus item dari keranjang
+
                     $itemCard->delete();
                 }
 
             } elseif ($changeQuantity > 0) {
+
                 // Jika item belum ada dan quantity > 0, buat item baru.
+
                 ItemCard::create([
                     'keranjang_id' => $keranjang->id,
                     'sparepart_id' => $sparepartId,
                     'quantity' => $changeQuantity,
+
                     'price' => $sparepartPrice // Menggunakan harga yang sudah divalidasi
                 ]);
             }
             // Jika item belum ada dan changeQuantity <= 0, maka tidak ada yang dilakukan, yang sudah benar.
+
 
             DB::commit();
             return response()->json(['message' => 'Keranjang berhasil diperbarui.'], 200);
 
         } catch (\Exception $e) {
             DB::rollBack();
+
             // 💡 PERBAIKAN DIAGNOSTIK: Tambahkan pesan error yang jelas ke respons JSON.
             Log::error('Gagal memperbarui keranjang untuk user ' . $user->id . ': ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -128,6 +142,7 @@ class KeranjangController extends Controller
                 'message' => 'Gagal memperbarui keranjang.', 
                 'internal_error' => $e->getMessage() // Sediakan pesan internal error untuk debugging
             ], 500);
+
         }
     }
 
@@ -174,6 +189,7 @@ class KeranjangController extends Controller
         $user = Auth::user();
         $keranjang = $user->keranjang;
 
+
         try {
              if ($keranjang) {
                 $keranjang->items()->delete();
@@ -182,6 +198,7 @@ class KeranjangController extends Controller
         } catch (\Exception $e) {
              Log::error('Gagal membersihkan keranjang: ' . $e->getMessage());
              return response()->json(['message' => 'Gagal membersihkan keranjang karena kesalahan server.', 'internal_error' => $e->getMessage()], 500);
+
         }
         
         return response()->json(['message' => 'Keranjang sudah kosong.'], 200);

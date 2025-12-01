@@ -22,6 +22,11 @@ class Sparepart extends Model
         'status'
     ];
 
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
     public function modelMobil()
     {
         return $this->belongsTo(ModelMobil::class, 'model_mobil_id');
@@ -46,4 +51,16 @@ class Sparepart extends Model
     {
         return $this->hasMany(TransactionItem::class);
     }
+<<<<<<< HEAD
+=======
+
+    public function getImageUrlAttribute()
+{
+    if (!$this->image) {
+        return null;
+    }
+    return asset('storage/' . $this->image);
+}
+
+>>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
 }

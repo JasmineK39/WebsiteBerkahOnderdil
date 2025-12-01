@@ -11,8 +11,12 @@
         <!-- Gambar Produk -->
         <div>
           <img
+<<<<<<< HEAD
             :src="product.image || '/placeholder.png'"
             :alt="product.name"
+=======
+            :src="product.image"
+>>>>>>> 6ed2205f85b9826a31eae9b670fca7c4b7ec218c
             class="w-full h-96 object-cover rounded-lg"
           />
         </div>
