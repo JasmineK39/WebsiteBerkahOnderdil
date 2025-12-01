@@ -115,7 +115,7 @@ async function fetchProducts() {
     const res = await axios.get(url)
     console.log('✅ Response:', res.data)
 
-    products.value = Array.isArray(res.data) ? res.data : res.data.data || []
+    products.value = Array.isArray(res.data) ? res.data : []
   } catch (err) {
     console.error('❌ Error fetching spareparts:', err)
     error.value = 'Gagal memuat data sparepart.'
