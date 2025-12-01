@@ -22,6 +22,8 @@ class Sparepart extends Model
         'status'
     ];
 
+    
+
     public function modelMobil()
     {
         return $this->belongsTo(ModelMobil::class, 'model_mobil_id');
