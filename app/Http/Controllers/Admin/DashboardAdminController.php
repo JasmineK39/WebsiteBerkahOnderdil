@@ -44,5 +44,4 @@ public function index()
                 ->get(),
         ]);
     }
-
 }

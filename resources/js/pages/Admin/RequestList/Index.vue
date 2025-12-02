@@ -43,7 +43,6 @@
     <option value="rejected">Ditolak</option>
   </select>
 </td>
-
         </tr>
       </tbody>
     </table>

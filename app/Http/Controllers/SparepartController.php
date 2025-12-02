@@ -64,7 +64,6 @@ class SparepartController extends Controller
     return response()->json($sparepart);
 }
 
-
     public function store(Request $request)
 {
     $data = $request->validate([
