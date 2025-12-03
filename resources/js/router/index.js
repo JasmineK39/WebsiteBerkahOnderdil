@@ -15,6 +15,10 @@ import LoginView from '../pages/Auth/LoginView.vue';
 import RegisterView from '../pages/Auth/RegisterView.vue';
 import ResetPassword from '../pages/Auth/ResetPassword.vue';
 import ForgotPassword from '../pages/Auth/ForgotPassword.vue';
+import CheckoutConfirm from '../pages/CheckoutConfirm.vue';
+import ReviewStore from '../pages/ReviewStore.vue';
+import OrderHistory from '../pages/OrderHistory.vue';
+
 
 
 const routes = [
@@ -29,6 +33,10 @@ const routes = [
       { path: 'about', name: 'about', component: () => import('../pages/About.vue'), meta: { title: 'Tentang Kami' }},
       { path: 'help', name: 'help', component: () => import('../pages/Help.vue'), meta: { title: 'Help/FAQ' }},
       { path: 'cart', component: Cart,meta: { requiresAuth: true }},
+      { path: '/checkout-confirm/:id', name: 'CheckoutConfirm', component: CheckoutConfirm, props: true, },
+      { path: '/review/:id', name: 'ReviewStore', component: ReviewStore, props: true },
+      { path: '/orders', name: 'OrderHistory', component: OrderHistory, meta: { requiresAuth: true }},
+
       ]
   },
   { path: '/auth', component: AuthLayout,

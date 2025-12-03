@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->timestamp('transaction_date')->useCurrent();
             $table->decimal('total_amount', 14, 2)->default(0);
             $table->enum('status', ['pending','paid','shipped','completed','cancelled'])->default('pending');
-            $table->enum('payment_method', ['COD','Transfer','E-Wallet'])->nullable();
+            $table->enum('payment_method', ['Cash','Transfer'])->nullable();
             $table->string('whatsapp_link', 255)->nullable();
             $table->string('location', 300)->nullable();
             $table->text('address')->nullable();

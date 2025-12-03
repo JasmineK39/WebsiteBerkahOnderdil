@@ -16,7 +16,6 @@
         <!-- Form Request -->
         <form @submit.prevent="submitForm" class="bg-red-800 text-white p-6 rounded-xl shadow-lg mb-10">
           <div class="grid md:grid-cols-2 gap-4">
-
             <!-- Input Merek -->
 <div>
   <label class="block mb-2 font-medium">Merek Mobil</label>
@@ -42,7 +41,6 @@
     required
   >
 </div>
-
 
             <!-- Tahun -->
             <div>

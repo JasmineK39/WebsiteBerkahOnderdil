@@ -11,7 +11,6 @@ class MobilSeeder extends Seeder
     {
         $mobils = [
             ['brand' => 'Toyota', 'model' => 'Kijang Innova', 'image' => 'kijangInova.png'],
-
         ];
 
         foreach ($mobils as $m) {

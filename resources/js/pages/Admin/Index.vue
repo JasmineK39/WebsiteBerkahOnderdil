@@ -1,5 +1,6 @@
 <template>
-  <div>
+
+  <div class="p-6">
 
     <!-- TITLE -->
     <h1 class="text-3xl font-bold text-[#161A1D] mb-6">
@@ -20,10 +21,10 @@
       </div>
 
       <div class="p-5 bg-white shadow rounded-xl border-l-4 border-[#660708]">
-        <h2 class="text-sm text-[#161A1D] font-semibold">Sparepart Masuk Bulan Ini</h2>
-        <p class="text-3xl font-bold">{{ sparepartBulanan }}</p>
-      </div>
 
+        <h2 class="text-sm text-[#161A1D] font-semibold">Total Penjualan</h2>
+        <p class="text-3xl font-bold">{{ totalPenjualan }}</p>
+      </div>
     </div>
 
     <!-- ==== CHARTS ==== -->
@@ -37,6 +38,7 @@
 
       <!-- Sparepart Chart -->
       <div class="bg-white p-6 rounded-xl shadow border">
+
         <h3 class="text-lg font-bold text-[#161A1D] mb-3">Grafik Sparepart</h3>
         <canvas id="sparepartChart"></canvas>
       </div>
@@ -83,12 +85,13 @@ import { onMounted } from "vue";
 Chart.register(...registerables);
 
 const props = defineProps({
-  totalUser: { type: Number, default: 0 },
-  totalSparepart: { type: Number, default: 0 },
-  sparepartBulanan: { type: Number, default: 0 },
-  latestSpareparts: { type: Array, default: () => [] },
-  userPerMonth: { type: Array, default: () => [] },
-  sparepartPerMonth: { type: Array, default: () => [] }
+
+  totalUser: Number,
+  totalSparepart: Number,
+  totalPenjualan: Number,
+  latestSpareparts: Array,
+  userPerMonth: Array,
+  checkoutPerMonth: Array
 });
 
 onMounted(() => {
@@ -107,10 +110,11 @@ onMounted(() => {
           borderColor: "#BA181B",
           backgroundColor: "#E5383B55",
           borderWidth: 2,
-          tension: 0.3
-        }
-      ]
-    }
+
+          tension: 0.3,
+        },
+      ],
+    },
   });
 
   // SPAREPART CHART
@@ -126,10 +130,11 @@ onMounted(() => {
           label: "Sparepart Masuk",
           data: spareData,
           backgroundColor: "#660708",
-          borderRadius: 6
-        }
-      ]
-    }
+          borderRadius: 6,
+        },
+      ],
+    },
   });
 });
+
 </script>
