@@ -132,6 +132,8 @@ const form = ref({
   note: ''
 })
 
+
+
 // Dropdown data dari API
 const brands = ref([])
 const models = ref([])
@@ -187,6 +189,7 @@ const getRequests = async () => {
     console.error("Gagal memuat riwayat:", error)
   }
 }
+
 
 /* ---------- LOAD BRAND SAAT PERTAMA KALI ---------- */
 onMounted(() => {
