@@ -60,12 +60,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware(['admin'])->prefix('admin')->group(function () {
     
-    // CRUD Sparepart
-    Route::get('/spareparts', [AdminSparepartController::class, 'index']);
-    Route::get('/spareparts/{id}', [AdminSparepartController::class, 'show']);
-    Route::post('/spareparts', [AdminSparepartController::class, 'store']);
-    Route::put('/spareparts/{id}', [AdminSparepartController::class, 'update']);
-    Route::delete('/spareparts/{id}', [AdminSparepartController::class, 'destroy']);
         // CRUD Sparepart
         Route::get('/spareparts', [AdminSparepartController::class, 'index']);
         Route::get('/spareparts/{id}', [AdminSparepartController::class, 'show']);

@@ -150,7 +150,6 @@ const form = reactive({
   stock: 0,
   price: 0,
   description: '',
-  // Tidak perlu 'image' di sini karena data gambar lama sudah di loadData
   status: ''
 })
 
@@ -163,7 +162,7 @@ const saving = ref(false)
 const error = ref(null)
 
 const gradeOptions = ref(['A', 'B', 'C']) 
-const statusOptions = ref(['Available', 'Sold Out'])
+const statusOptions = ref(['available', 'sold_out'])
 
 // State untuk data relasi
 const modelMobils = ref([])
@@ -178,13 +177,16 @@ const handleFileUpload = (event) => {
 const loadData = async () => {
   try {
     const res = await axios.get(`/api/admin/spareparts/${sparepartId}`)
-    // Object.assign akan mengisi 'form' dengan data dari API
+
+    // simpan semua data, termasuk gambar lama
     Object.assign(form, res.data)
+
   } catch (err) {
     console.error('Gagal memuat data sparepart:', err)
     error.value = 'Gagal memuat data. Coba lagi nanti.'
   }
 }
+
 
 // Fungsi untuk mengambil data model mobil
 const loadModelMobils = async () => {
@@ -203,37 +205,31 @@ const update = async () => {
   saving.value = true
   error.value = null
 
-  // 1. Buat FormData
   const formData = new FormData()
 
-  // 2. Tambahkan field form non-file ke FormData
+  // Tambahkan semua value kecuali image
   for (const key in form) {
-    // Pastikan nilai tidak null atau undefined, kecuali description/type
-    if (form[key] !== null && form[key] !== undefined) {
-      formData.append(key, form[key])
+    if (key !== 'image') { 
+      formData.append(key, form[key] ?? '') 
     }
   }
 
-  // 3. Tambahkan file gambar BARU (jika ada)
+  // Jika ada file baru → kirim
   if (newImageFile.value) {
     formData.append('image', newImageFile.value)
   }
-  
-  // 4. Tambahkan metode PUT spoofing untuk Laravel
-  formData.append('_method', 'PUT') 
+
+  // Spoofing PUT
+  formData.append('_method', 'PUT')
 
   try {
-    // Kirim request menggunakan axios.post (karena ada file upload)
-    await axios.post(`/api/admin/spareparts/${sparepartId}`, formData, {
-        // Header ini penting, tetapi Axios biasanya menanganinya secara otomatis
-        // saat menggunakan FormData, jadi ini opsional:
-        // headers: { 'Content-Type': 'multipart/form-data' } 
-    })
+    await axios.post(`/api/admin/spareparts/${sparepartId}`, formData)
     router.push('/admin/spareparts')
+
   } catch (err) {
     console.error('Gagal mengupdate sparepart:', err)
     if (err.response && err.response.status === 422) {
-      error.value = 'Data yang Anda masukkan tidak valid. Periksa kembali semua field.'
+      error.value = 'Data yang Anda masukkan tidak valid.'
     } else {
       error.value = 'Terjadi kesalahan saat menyimpan data.'
     }
@@ -241,6 +237,7 @@ const update = async () => {
     saving.value = false
   }
 }
+
 
 // onMounted: panggil semua fungsi load data saat komponen dimuat
 onMounted(async () => {

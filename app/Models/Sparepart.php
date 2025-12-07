@@ -21,6 +21,7 @@ class Sparepart extends Model
         'image',
         'status'
     ];
+    protected $appends = ['rating'];
 
     public function modelMobil()
     {
@@ -54,4 +55,17 @@ class Sparepart extends Model
     }
     return asset('storage/' . $this->image);
 }
+    public function getRatingAttribute()
+{
+    $avg = $this->reviews()->avg('rating');
+
+    // Jika null, kembalikan 0.0
+    if (!$avg) {
+        return 0.0;
+    }
+
+    // Format 1 angka di belakang koma
+    return number_format($avg, 1, '.', '');
+}
+
 }

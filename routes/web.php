@@ -20,6 +20,8 @@ Route::get('/', function () {
 });
 
 
+// Keep SPA catch-all, but exclude Scramble docs to let package routes handle `/docs/*`
 Route::get('/{any}', function () {
     return view('welcome');
-})->where('any', '.*');
+})->where('any', '^(?!docs).*$');
+

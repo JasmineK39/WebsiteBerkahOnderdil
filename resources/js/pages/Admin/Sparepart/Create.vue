@@ -152,7 +152,7 @@ const saving = ref(false)
 const error = ref(null)
 
 const gradeOptions = ref(['A', 'B', 'C']) 
-const statusOptions = ref(['Available', 'Sold Out'])
+const statusOptions = ref(['available', 'sold_out'])
 
 // State untuk data relasi
 const modelMobils = ref([])

@@ -98,6 +98,28 @@ class SparepartController extends Controller
         }
 
         $validatedData = $validator->validated();
+        // Logika Update Gambar
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($sparepart->image && Storage::disk('public')->exists($sparepart->image)) {
+                Storage::disk('public')->delete($sparepart->image);
+            }
+            
+            // Simpan gambar baru
+            $imagePath = $request->file('image')->store('images/spareparts', 'public');
+            $validatedData['image'] = $imagePath;
+            
+        } else if (isset($validatedData['image']) && $validatedData['image'] === null) {
+            // Ini untuk kasus user secara eksplisit menghapus gambar yang sudah ada
+            if ($sparepart->image && Storage::disk('public')->exists($sparepart->image)) {
+                 Storage::disk('public')->delete($sparepart->image);
+            }
+            $validatedData['image'] = null; // Set di DB menjadi null
+            
+        } else {
+            // JANGAN SENTUH KOLOM 'image' jika tidak ada file baru dan tidak ada perintah hapus.
+            unset($validatedData['image']);
+        }
 
         // Proses File Upload untuk Update (Jika Ada)
         if ($request->hasFile('image')) {

@@ -20,6 +20,7 @@
             
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nama</th>
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Model Mobil</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Rating</th>
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Grade</th>
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Stok</th>
             <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Status</th>
@@ -43,7 +44,8 @@
               <span v-else class="text-gray-400 text-xs">No Image</span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ item.name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ item.model_mobil?.name || '-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ item.model_mobil?.model || '-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ item.rating }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                 <span :class="{'bg-green-100 text-green-800': item.grade === 'A', 'bg-yellow-100 text-yellow-800': item.grade === 'B', 'bg-red-100 text-red-800': item.grade === 'C'}" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full">
                     {{ item.grade }}
