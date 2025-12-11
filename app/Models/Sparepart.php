@@ -64,8 +64,7 @@ class Sparepart extends Model
         return 0.0;
     }
 
-    // Format 1 angka di belakang koma
-    return number_format($avg, 1, '.', '');
+    return round((float)$avg, 1);
 }
 
 }
