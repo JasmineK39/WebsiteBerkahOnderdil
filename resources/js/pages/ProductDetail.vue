@@ -21,6 +21,20 @@
           <h1 class="text-3xl font-bold text-gray-900 mb-2">
             {{ product.name }}
           </h1>
+
+          <div class="flex items-center gap-3 mb-4">
+            <div v-if="product.average_rating > 0" class="flex items-center space-x-2">
+                    <div v-html="renderStarRating(product.average_rating)" class="flex text-yellow-500 text-2xl leading-none"></div>
+                    <span class="text-xl font-bold text-gray-800">{{ product.average_rating.toFixed(1) }}</span>
+                    <a href="#reviews" class="text-sm text-blue-600 hover:text-blue-800 transition duration-150">
+                        ({{ product.reviews_count }} ulasan)
+                    </a>
+            </div>
+            <div v-else class="text-gray-500 text-sm italic">
+                Belum ada ulasan
+            </div>
+          </div>
+
           <p class="text-gray-500 text-sm mb-4">
             Brand: {{ product.brand }} | Type: {{ product.type }}
           </p>
@@ -89,6 +103,61 @@ const product = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
+const renderStarRating = (rating, starClass = 'text-lg') => {
+    if (typeof rating !== 'number') rating = 0;
+    const normalizedRating = Math.max(0, Math.min(5, rating));
+    let starsHtml = '';
+    
+    // Ikon Unicode
+    const FULL_STAR = '★'; 
+    const EMPTY_STAR = '☆'; 
+    
+    const roundedRating = Math.round(normalizedRating * 2) / 2; // Pembulatan ke 0.5 terdekat
+    
+    // Hitung bintang penuh dan setengah
+    const fullStars = Math.floor(roundedRating); 
+    const hasHalfStar = (roundedRating % 1) !== 0; 
+    
+    // Tambahkan bintang penuh
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += FULL_STAR;
+    }
+
+    // Tambahkan bintang kosong sisanya
+    const remainingStars = 5 - (hasHalfStar ? fullStars + 1 : fullStars);
+    
+    // Untuk tampilan sederhana, kita tidak menggunakan setengah bintang Unicode (karena sulit di-CSS)
+    // Kita gunakan bintang penuh jika rating dibulatkan ke atas.
+    
+    // Tambahkan bintang kosong sisanya (Total 5 bintang)
+    for (let i = 0; i < (5 - fullStars - (hasHalfStar ? 1 : 0)); i++) {
+         starsHtml += EMPTY_STAR;
+    }
+    
+    // Karena kita tidak bisa menggunakan bintang setengah di Unicode dengan mudah,
+    // kita akan menggunakan pembulatan ke atas untuk tampilan yang lebih baik (user prefer to see more stars)
+    // Di sini saya kembali ke logika sederhana untuk rendering string
+    
+    // Logika Finalisasi Bintang: Menggunakan 5 ikon penuh/kosong
+    let finalHtml = '';
+    let i = 0;
+    for (i = 0; i < fullStars; i++) {
+        finalHtml += FULL_STAR;
+    }
+    // Jika ada setengah, tambahkan bintang penuh lagi (praktik visual yang umum)
+    if(hasHalfStar) {
+        finalHtml += FULL_STAR;
+        i++;
+    }
+    // Tambahkan bintang kosong sisanya
+    for (let j = i; j < 5; j++) {
+        finalHtml += EMPTY_STAR;
+    }
+
+
+    return `<span class="${starClass} tracking-tighter">${finalHtml}</span>`;
+};
+
 function addToCart(sparepart) {
   cart.addToCart(sparepart)      // Tambahkan ke keranjang (Pinia)
   router.push('/cart')            // Arahkan ke halaman keranjang
@@ -124,11 +193,26 @@ Mohon info ketersediaannya ya, terima kasih!
   window.open(waUrl, '_blank')
 }
 
-
 async function fetchProductDetail() {
   try {
     const res = await axios.get(`/api/spareparts/${route.params.id}`)
-    product.value = res.data
+    
+    const data = res.data;
+    
+    // PERBAIKAN UTAMA: Konversi STRING yang dihasilkan number_format() ke FLOAT.
+    // Ini harus dilakukan jika Anda mempertahankan number_format() di Model Laravel.
+    if (data.average_rating && typeof data.average_rating === 'string') {
+        data.average_rating = parseFloat(data.average_rating);
+    } else if (!data.average_rating) {
+        // Handle jika rating adalah null/undefined (produk baru)
+        data.average_rating = 0.0;
+    }
+    // Pastikan reviews_count adalah integer (jika diperlukan)
+    data.reviews_count = data.reviews_count ? parseInt(data.reviews_count) : 0;
+
+
+    product.value = data;
+
   } catch (err) {
     console.error(err)
     error.value = 'Gagal memuat detail produk.'
@@ -145,4 +229,7 @@ onMounted(fetchProductDetail)
 </script>
 
 <style scoped>
+  .tracking-tighter {
+  letter-spacing: -0.2em; 
+}
 </style>
