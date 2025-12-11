@@ -17,55 +17,62 @@ class ReviewController extends Controller
      * @param  \App\Models\Transaksi  $transaksi  <-- INI ADALAH PERUBAHAN KRUSIAL
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Transaksi $transaksi)
+    public function store(Request $request, $transaksi)
     {
-        // 1. Validasi Input
-        $validated = $request->validate([
-            // ID Sparepart wajib, harus ada di tabel 'spareparts'
-            'sparepart_id' => [
-                'required', 
-                'integer', 
-                Rule::exists('spareparts', 'id')
-            ],
-            // Rating wajib, antara 1 sampai 5
-            'rating' => 'required|integer|min:1|max:5',
-            // Komentar opsional
-            'comment' => 'nullable|string|max:1000',
+        $transaksiId = $transaksi; 
+        // 1. Validasi Input Dasar
+        $request->validate([
+            'sparepart_id' => 'required|exists:spareparts,id',
+            'rating'       => 'required|integer|min:1|max:5',
+            'comment'      => 'nullable|string|max:1000',
         ]);
         
-        // 2. Cek Kepemilikan Transaksi dan Status
-        // Karena kita menggunakan Route Model Binding ($transaksi), kita hanya perlu cek kepemilikan.
-        if ($transaksi->user_id !== Auth::id()) {
-            // Menggunakan abort() akan memberikan response 403 Forbidden yang bersih
-            abort(403, 'Akses ditolak. Transaksi ini bukan milik Anda.'); 
+        $userId = Auth::id();
+
+        // 2. Verifikasi Ketersediaan & Status Transaksi
+        $transaksi = Transaksi::with('items.sparepart')
+                            ->where('id', $transaksiId)
+                            ->where('user_id', $userId) // Pastikan milik user
+                            ->firstOrFail();
+
+        // Cek 2A: Pastikan pesanan sudah selesai/terkirim (Sesuaikan status Anda)
+        if ($transaksi->status !== 'delivered' && $transaksi->status !== 'completed') {
+            return response()->json(['message' => 'Ulasan hanya dapat diberikan untuk transaksi yang sudah selesai.'], 403);
         }
 
-        // 3. Cek Duplikasi Review
-        $existingReview = Review::where('user_id', Auth::id())
-            ->where('sparepart_id', $validated['sparepart_id'])
-            // Gunakan ID dari objek Transaksi yang sudah di-bind
-            ->where('transaksi_id', $transaksi->id) 
-            ->exists();
-
-        if ($existingReview) {
-             return response()->json([
-                'message' => 'Anda sudah memberikan review untuk sparepart ini pada transaksi yang sama.'
-            ], 409); 
+        // Cek 2B: Pastikan sparepart yang diulas ada dalam transaksi ini
+        $itemFound = false;
+        foreach ($transaksi->items as $item) {
+            if ($item->sparepart_id == $request->sparepart_id) {
+                $itemFound = true;
+                break;
+            }
         }
 
-        // 4. Menyimpan Review Baru
-        $review = Review::create([
-            'user_id' => Auth::id(), 
-            'sparepart_id' => $validated['sparepart_id'],
-            'transaksi_id' => $transaksi->id, // Gunakan ID dari objek Transaksi
-            'rating' => $validated['rating'],
-            'comment' => $validated['comment'],
-        ]);
+        if (!$itemFound) {
+             return response()->json(['message' => 'Sparepart ID tidak ditemukan dalam transaksi ini.'], 404);
+        }
+        
+        // 3. Buat Ulasan Baru (dengan try-catch untuk menangkap duplikasi)
+        try {
+            $review = Review::create([
+                'user_id'      => $userId,
+                'sparepart_id' => $request->sparepart_id,
+                'transaksi_id' => $transaksiId, 
+                'rating'       => $request->rating,
+                'comment'      => $request->comment,
+            ]);
 
-        // 5. Response Sukses
-        return response()->json([
-            'message' => 'Review berhasil disimpan!',
-            'review' => $review
-        ], 201);
+            return response()->json([
+                'message' => 'Ulasan berhasil disimpan.',
+                'review' => $review
+            ], 201);
+
+        } catch (UniqueConstraintViolationException $e) {
+            // Tangkap exception jika database mendeteksi duplikasi pada (user_id, sparepart_id, transaksi_id)
+            return response()->json([
+                'message' => 'Anda sudah mengulas sparepart ini untuk transaksi yang sama.'
+            ], 409); // 409 Conflict
+        }
     }
 }

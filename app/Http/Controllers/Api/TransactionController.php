@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Transaksi;
+use App\Models\Review;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB; 
 use Illuminate\Support\Facades\Auth;
@@ -22,11 +23,7 @@ class TransactionController extends Controller
         Log::info("Permintaan detail transaksi diterima untuk ID: " . $id);
 
         try {
-            // Ambil data transaksi beserta item-itemnya.
-            // Metode with('items') mengasumsikan Anda memiliki relasi 'items' di model Transaction.
             $transaction = Transaksi::with('items.sparepart')->findOrFail($id);
-
-            // Mengembalikan data transaksi dalam format JSON
             return response()->json($transaction);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -37,6 +34,48 @@ class TransactionController extends Controller
             // Log error lain (misalnya, masalah database atau relasi)
             Log::error("Error saat mengambil transaksi ID {$id}: " . $e->getMessage());
             // Kembalikan error 500
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function reviewDetails($id)
+    {
+        Log::info("Permintaan detail review diterima untuk Transaksi ID: " . $id);
+
+        try {
+            // 1. Ambil data transaksi beserta item-item dan sparepartnya
+            $transaction = Transaksi::with('items.sparepart')->findOrFail($id);
+            
+            // Dapatkan ID pengguna yang sedang login
+            $userId = Auth::id();
+
+            // 2. Iterasi setiap item transaksi dan cek status review
+            $itemsWithReviewStatus = $transaction->items->map(function (TransactionItem $item) use ($userId, $id) {
+                
+                // Cek apakah sudah ada Review yang dibuat oleh user ini
+                // untuk sparepart_id dan transaksi_id ini.
+                $isReviewed = Review::where('user_id', $userId)
+                                    ->where('sparepart_id', $item->sparepart_id)
+                                    ->where('transaksi_id', $id)
+                                    ->exists();
+                
+                // Tambahkan properti 'is_reviewed' ke objek item
+                $item->is_reviewed = $isReviewed;
+                
+                return $item;
+            });
+            
+            // 3. Susun respons (kita gunakan objek transaksi yang sudah dimodifikasi)
+            $response = $transaction->toArray();
+            $response['items'] = $itemsWithReviewStatus->toArray();
+
+            return response()->json($response);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::warning("Transaksi untuk review tidak ditemukan ID: " . $id);
+            return response()->json(['message' => 'Transaksi tidak ditemukan'], 404);
+        } catch (\Exception $e) {
+            Log::error("Error saat mengambil detail review Transaksi ID {$id}: " . $e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
@@ -57,7 +96,7 @@ class TransactionController extends Controller
             // Update data transaksi di database
             $transaction->address = $data['address'];
             $transaction->payment_method = $data['payment_method'];
-            $transaction->status = 'completed';
+            $transaction->status = 'shipped';
             $transaction->save();
 
             $formatRupiah = function($amount) {
