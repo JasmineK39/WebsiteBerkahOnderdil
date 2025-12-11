@@ -55,7 +55,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transaction/{id}', [TransactionController::class, 'show']);
     Route::put('/transaction/{id}/finalize', [TransactionController::class, 'finalize']);
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders/{id}/complete', [OrderController::class, 'completeOrder']);
     Route::post('/transaksi/{transaksi}/review', [ReviewController::class, 'store']);
+    Route::get('/transaksi/{id}/review-details', [TransactionController::class, 'reviewDetails']);
 
 
 Route::middleware(['admin'])->prefix('admin')->group(function () {
