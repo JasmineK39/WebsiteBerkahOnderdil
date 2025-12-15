@@ -6,6 +6,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+
+use App\Models\Keranjang;
+use App\Models\Transaksi;
+use App\Models\Review;
+use App\Models\RequestSparepart;
 use App\Notifications\CustomResetPassword;
 
 class User extends Authenticatable

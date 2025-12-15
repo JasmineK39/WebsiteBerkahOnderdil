@@ -1,5 +1,4 @@
 <template>
-
   <div class="p-6">
 
     <!-- TITLE -->
@@ -21,10 +20,10 @@
       </div>
 
       <div class="p-5 bg-white shadow rounded-xl border-l-4 border-[#660708]">
-
         <h2 class="text-sm text-[#161A1D] font-semibold">Total Penjualan</h2>
         <p class="text-3xl font-bold">{{ totalPenjualan }}</p>
       </div>
+
     </div>
 
     <!-- ==== CHARTS ==== -->
@@ -33,14 +32,13 @@
       <!-- User Chart -->
       <div class="bg-white p-6 rounded-xl shadow border">
         <h3 class="text-lg font-bold text-[#161A1D] mb-3">Grafik User</h3>
-        <canvas id="userChart"></canvas>
+        <canvas ref="userChartRef"></canvas>
       </div>
 
-      <!-- Sparepart Chart -->
+      <!-- Checkout Chart -->
       <div class="bg-white p-6 rounded-xl shadow border">
-
-        <h3 class="text-lg font-bold text-[#161A1D] mb-3">Grafik Sparepart</h3>
-        <canvas id="sparepartChart"></canvas>
+        <h3 class="text-lg font-bold text-[#161A1D] mb-3">Grafik Checkout</h3>
+        <canvas ref="checkoutChartRef"></canvas>
       </div>
 
     </div>
@@ -64,77 +62,106 @@
             :key="item.id"
             class="border-b hover:bg-[#F5F3F4] transition"
           >
-            <td class="py-3 px-3 text-[#161A1D]">{{ item.nama }}</td>
-            <td class="py-3 px-3 text-[#660708] font-semibold">
-              Rp {{ item.harga }}
+            <td class="py-3 px-3 text-[#161A1D]">
+              {{ item.nama_sparepart ?? item.name }}
             </td>
-            <td class="py-3 px-3">{{ item.stok }}</td>
+            <td class="py-3 px-3 text-[#660708] font-semibold">
+              Rp {{ item.price }}
+            </td>
+            <td class="py-3 px-3">
+              {{ item.stok ?? item.stock }}
+            </td>
           </tr>
         </tbody>
       </table>
-
     </div>
 
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted, nextTick } from "vue";
+import axios from "axios";
 import { Chart, registerables } from "chart.js";
-import { onMounted } from "vue";
 
 Chart.register(...registerables);
 
-const props = defineProps({
+// ================= STATE =================
+const totalUser = ref(0);
+const totalSparepart = ref(0);
+const totalPenjualan = ref(0);
+const latestSpareparts = ref([]);
+const userPerMonth = ref([]);
+const checkoutPerMonth = ref([]);
 
-  totalUser: Number,
-  totalSparepart: Number,
-  totalPenjualan: Number,
-  latestSpareparts: Array,
-  userPerMonth: Array,
-  checkoutPerMonth: Array
-});
+// ================= CANVAS REF =================
+const userChartRef = ref(null);
+const checkoutChartRef = ref(null);
 
-onMounted(() => {
+// ================= CHART INSTANCE =================
+let userChartInstance = null;
+let checkoutChartInstance = null;
+
+// ================= FETCH DASHBOARD =================
+const fetchDashboard = async () => {
+  try {
+    const res = await axios.get("/api/admin/dashboard", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+        Accept: "application/json",
+      },
+    });
+
+    totalUser.value = res.data.totalUser;
+    totalSparepart.value = res.data.totalSparepart;
+    totalPenjualan.value = res.data.totalPenjualan;
+    latestSpareparts.value = res.data.latestSpareparts;
+    userPerMonth.value = res.data.userPerMonth;
+    checkoutPerMonth.value = res.data.checkoutPerMonth;
+
+    renderCharts();
+  } catch (error) {
+    console.error("Gagal mengambil data dashboard:", error);
+  }
+};
+
+// ================= RENDER CHART =================
+const renderCharts = async () => {
+  await nextTick();
+
+  // Destroy chart lama (anti double render)
+  if (userChartInstance) userChartInstance.destroy();
+  if (checkoutChartInstance) checkoutChartInstance.destroy();
+
   // USER CHART
-  const userLabels = (props.userPerMonth || []).map(x => "Bulan " + x.bulan);
-  const userData = (props.userPerMonth || []).map(x => x.total);
-
-  new Chart(document.getElementById("userChart"), {
+  userChartInstance = new Chart(userChartRef.value, {
     type: "line",
     data: {
-      labels: userLabels,
-      datasets: [
-        {
-          label: "User Baru",
-          data: userData,
-          borderColor: "#BA181B",
-          backgroundColor: "#E5383B55",
-          borderWidth: 2,
-
-          tension: 0.3,
-        },
-      ],
+      labels: userPerMonth.value.map(x => "Bulan " + x.bulan),
+      datasets: [{
+        label: "User Baru",
+        data: userPerMonth.value.map(x => x.total),
+        borderColor: "#BA181B",
+        backgroundColor: "#E5383B55",
+        tension: 0.3,
+      }],
     },
   });
 
-  // SPAREPART CHART
-  const spareLabels = (props.sparepartPerMonth || []).map(x => "Bulan " + x.bulan);
-  const spareData = (props.sparepartPerMonth || []).map(x => x.total);
-
-  new Chart(document.getElementById("sparepartChart"), {
+  // CHECKOUT CHART
+  checkoutChartInstance = new Chart(checkoutChartRef.value, {
     type: "bar",
     data: {
-      labels: spareLabels,
-      datasets: [
-        {
-          label: "Sparepart Masuk",
-          data: spareData,
-          backgroundColor: "#660708",
-          borderRadius: 6,
-        },
-      ],
+      labels: checkoutPerMonth.value.map(x => "Bulan " + x.bulan),
+      datasets: [{
+        label: "Total Checkout",
+        data: checkoutPerMonth.value.map(x => x.total),
+        backgroundColor: "#660708",
+        borderRadius: 6,
+      }],
     },
   });
-});
+};
 
+onMounted(fetchDashboard);
 </script>

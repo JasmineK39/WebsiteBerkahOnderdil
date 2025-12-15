@@ -6,6 +6,7 @@ use App\Http\Controllers\SparepartController;
 use App\Http\Controllers\Admin\SparepartController as AdminSparepartController;
 use App\Http\Controllers\Admin\ModelMobilController as AdminModelMobilController;
 use App\Http\Controllers\Admin\SparepartRequestController as AdminRequestController;
+use App\Http\Controllers\Admin\DashboardAdminController;
 
 use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\SparepartRequestController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ReviewController;
+
 
 // Tes route awal
 
@@ -61,7 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 Route::middleware(['admin'])->prefix('admin')->group(function () {
-    
+        Route::get('/dashboard', [DashboardAdminController::class, 'index']);
         // CRUD Sparepart
         Route::get('/spareparts', [AdminSparepartController::class, 'index']);
         Route::get('/spareparts/{id}', [AdminSparepartController::class, 'show']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\User;
 use App\Models\Keranjang;
 use App\Models\ItemCard;
 use App\Models\Sparepart;
