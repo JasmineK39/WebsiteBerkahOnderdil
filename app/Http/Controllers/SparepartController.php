@@ -55,20 +55,25 @@ class SparepartController extends Controller
 
     public function show($id)
 {
-    $sparepart = Sparepart::with('modelMobil', 'kategoris')->findOrFail($id);
+    $sparepart = Sparepart::with([
+        'modelMobil',
+        'kategoris',
+        'reviews.user'
+    ])
+    ->withCount('reviews')
+    ->findOrFail($id);
 
+    
     if ($sparepart->image) {
         $sparepart->image = asset('storage/' . $sparepart->image);
     }
 
-    $sparepart = Sparepart::with('modelMobil')
-        ->with('reviews.user') // Eager load relasi reviews DAN user yang memberikan review
-        ->withCount('reviews') // Dapatkan reviews_count
-        ->findOrFail($id);
-    $sparepart->average_rating = $sparepart->rating;
+    // Rating
+    $sparepart->average_rating = $sparepart->rating ?? 0;
 
     return response()->json($sparepart);
 }
+
 
     public function store(Request $request)
 {
